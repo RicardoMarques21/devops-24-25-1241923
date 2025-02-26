@@ -1,44 +1,34 @@
-/*
- * Copyright 2015 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.greglturnquist.payroll;
 
 import java.util.Objects;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
- * @author Greg Turnquist
+ * Represents an Employee entity with job details.
  */
-// tag::code[]
-@Entity // <1>
+@Entity
 public class Employee {
 
-	private @Id @GeneratedValue Long id; // <2>
+	private @Id @GeneratedValue Long id;
 	private String firstName;
 	private String lastName;
 	private String description;
 
-	private Employee() {}
+	@NotNull(message = "Job years cannot be null")
+	@Min(value = 0, message = "Job years must be a non-negative integer")
+	private Integer jobYears;
 
-	public Employee(String firstName, String lastName, String description) {
+	protected Employee() {}
+
+	public Employee(String firstName, String lastName, String description, Integer jobYears) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.description = description;
+		this.jobYears = jobYears;
 	}
 
 	@Override
@@ -47,15 +37,15 @@ public class Employee {
 		if (o == null || getClass() != o.getClass()) return false;
 		Employee employee = (Employee) o;
 		return Objects.equals(id, employee.id) &&
-			Objects.equals(firstName, employee.firstName) &&
-			Objects.equals(lastName, employee.lastName) &&
-			Objects.equals(description, employee.description);
+				Objects.equals(firstName, employee.firstName) &&
+				Objects.equals(lastName, employee.lastName) &&
+				Objects.equals(description, employee.description) &&
+				Objects.equals(jobYears, employee.jobYears);
 	}
 
 	@Override
 	public int hashCode() {
-
-		return Objects.hash(id, firstName, lastName, description);
+		return Objects.hash(id, firstName, lastName, description, jobYears);
 	}
 
 	public Long getId() {
@@ -90,14 +80,22 @@ public class Employee {
 		this.description = description;
 	}
 
+	public Integer getJobYears() {
+		return jobYears;
+	}
+
+	public void setJobYears(Integer jobYears) {
+		this.jobYears = jobYears;
+	}
+
 	@Override
 	public String toString() {
 		return "Employee{" +
-			"id=" + id +
-			", firstName='" + firstName + '\'' +
-			", lastName='" + lastName + '\'' +
-			", description='" + description + '\'' +
-			'}';
+				"id=" + id +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", description='" + description + '\'' +
+				", jobYears=" + jobYears +
+				'}';
 	}
 }
-// end::code[]
