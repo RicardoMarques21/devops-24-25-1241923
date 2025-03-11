@@ -109,6 +109,7 @@ public class Employee {
 		if (email == null || email.trim().isEmpty()) {
 			throw new IllegalArgumentException("Email cannot be null or empty");
 		}
+
 		if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
 			throw new IllegalArgumentException("Invalid email format");
 		}
