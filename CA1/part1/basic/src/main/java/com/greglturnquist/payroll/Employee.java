@@ -27,6 +27,10 @@ public class Employee {
 	@Size(min = 1, message = "Last name cannot be empty")
 	private String lastName;
 
+	@NotNull(message = "Job title cannot be null")
+	@Size(min = 1, message = "Job title cannot be empty")
+	private String jobTitle;
+
 	@NotNull(message = "Description cannot be null")
 	@Size(min = 1, message = "Description cannot be empty")
 	private String description;
@@ -41,9 +45,10 @@ public class Employee {
 
 	protected Employee() {}
 
-	public Employee(String firstName, String lastName, String description, Integer jobYears, String email) {
+	public Employee(String firstName, String lastName, String jobTitle, String description, Integer jobYears, String email) {
 		setFirstName(firstName);
 		setLastName(lastName);
+		setJobTitle(jobTitle);
 		setDescription(description);
 		setJobYears(jobYears);
 		setEmail(email);
@@ -79,6 +84,17 @@ public class Employee {
 		this.lastName = lastName;
 	}
 
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	public void setJobTitle(String jobTitle) {
+		if (jobTitle == null || jobTitle.trim().isEmpty()) {
+			throw new IllegalArgumentException("Job title cannot be null or empty");
+		}
+		this.jobTitle = jobTitle;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -109,8 +125,7 @@ public class Employee {
 		if (email == null || email.trim().isEmpty()) {
 			throw new IllegalArgumentException("Email cannot be null or empty");
 		}
-
-		if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+		if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") ) {
 			throw new IllegalArgumentException("Invalid email format");
 		}
 		this.email = email;
@@ -124,6 +139,7 @@ public class Employee {
 		return Objects.equals(id, employee.id) &&
 				Objects.equals(firstName, employee.firstName) &&
 				Objects.equals(lastName, employee.lastName) &&
+				Objects.equals(jobTitle, employee.jobTitle) &&
 				Objects.equals(description, employee.description) &&
 				Objects.equals(jobYears, employee.jobYears) &&
 				Objects.equals(email, employee.email);
@@ -131,7 +147,7 @@ public class Employee {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, firstName, lastName, description, jobYears, email);
+		return Objects.hash(id, firstName, lastName, jobTitle, description, jobYears, email);
 	}
 
 	@Override
@@ -140,6 +156,7 @@ public class Employee {
 				"id=" + id +
 				", firstName='" + firstName + '\'' +
 				", lastName='" + lastName + '\'' +
+				", jobTitle='" + jobTitle + '\'' +
 				", description='" + description + '\'' +
 				", jobYears=" + jobYears +
 				", email='" + email + '\'' +
