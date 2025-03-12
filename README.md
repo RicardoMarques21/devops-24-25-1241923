@@ -17,11 +17,24 @@
 - [Part 1: Development Without Branches](#part-1-development-without-branches)
     - [Goals and Requirements](#goals-and-requirements)
     - [Key Developments](#key-developments)
+- [Part 2: Development Using Branches](#part-2-development-using-branches)
+  - [Goals and Requirements](#goals-and-requirements-1)
+  - [Key Developments](#key-developments-1)
+- [Final Results](#final-results)
+  - [Implementation](#implementation)
+  - [Branches](#branches)
+  - [Tags](#tags)
+  - [Issue Tracking](#issue-tracking)
+- [Alternative Solution](#alternative-solution)
+  - [Comparison of SVN and Git](#comparison-of-svn-and-git)
+  - [Utilizing SVN for the Assignment](#utilizing-svn-for-the-assignment)
+- [Conclusion](#conclusion)
 
 ## Introduction
 This report details the **Version Control with Git** assignment for the DevOps course. 
 
 **Part 1** is just using basic version control without branches.
+**Part 2** is implementing branching for new features and bug fixes.
 
 ## Environment Setup
 Initially, I cloned an existing repository containing the Tutorial React.js and Spring Data REST application to have a local copy of the tutorial project. Following this, I set up my own repository to host the class assignments and ensure that all developments were tracked under my version control.
@@ -247,3 +260,161 @@ After verifying the `jobYears` field's integration, I ran the application using 
 6. **End of the assignment**
 
 After ensuring the stability and performance of the new feature, I committed the changes to the repository with a clear and descriptive message detailing the enhancements. Then, I pushed the updated code to the remote server, enabling seamless collaboration with the team and maintaining the project's workflow. To highlight this significant update, I tagged the commit as `v1.2.0`, adhering to the project's semantic versioning standard. Finally, at the conclusion of the assignment, I marked the repository with the tag `ca1-part1`.
+
+## Part 2: Development Using Branches
+
+### Goals and Requirements
+-   The second part advances to using branches for feature development and bug fixes, emphasizing isolated development environments and merge strategies.
+-   Requirements include creating feature branches for new developments or bug fixes, ensuring that changes do not interfere with the main codebase until they are ready to be merged.
+-   The part concludes with tagging the master branch after successful merges to mark new versions of the application, showcasing effective branch management and integration in version control.
+
+### Key Developments
+In the second part, the focus shifted towards utilizing branch-based development to enhance the application's features and fix any existing bugs, ensuring that the master branch remained stable for "publishing" the stable versions of the Tutorial React.js and Spring Data REST Application.
+
+The steps for adding new features and fixing bugs are similar to those described in Part 1. Therefore, to avoid repetition, I will not show all the code again. The main difference here is the use of branches. Here are the main steps:
+
+1. **Start using the master branch**
+
+To ensure I was working in the correct branch, particularly the master branch for publishing stable versions, I employed the `git branch` command. This step was crucial during this second part, for verifying my current working branch, marked by an asterisk (*) in the command output.
+
+2. **Develop new features in branches**
+
+During the development phase of adding an email field to our application, effective branch management was crucial. The following command creates a new branch named email-field and switches to it:
+```shell
+git checkout -b email-field
+```
+3. **Integration and Testing of the Email Field**
+
+The process of adding support for the email field in the application and ensuring robust validation closely mirrored the approach taken with the `jobYears` field in Part 1. The following outlines the key steps taken.
+- **Code Implementation**: Similar to the previous feature development, I extended the `Employee` class to include an `email` field along with its getter and setter methods. This involved updating data models, forms, and views to accommodate the new field, ensuring it was fully integrated into the application's frontend and backend.
+- **Unit Testing**: Following the established pattern, I wrote comprehensive unit tests to verify the correct creation of Employee instances with the new email field and to enforce validation rules, such as non-null and non-empty values for the email attribute.
+- **Debugging**: The server and client parts of the application underwent thorough debugging to identify and rectify any issues arising from the addition of the email field, ensuring seamless operation and user experience.
+
+4. **Merge the code with the master**
+
+The completion of the email field feature involved a series of steps to integrate the changes into the main branch and update the application's version. Initially, the finalized changes in the `email-field` branch were committed. This branch was then pushed to the remote repository, setting the stage for merging into the main branch. To preserve the history, a no-fast-forward merge was used. After merging, the changes were pushed to the remote repository to update the main branch. Finally, the new version was tagged and pushed to mark this significant update. The commands used were as follows:
+```shell
+# Commit the feature changes:
+git add .
+git commit -m "email field added"
+
+# Push the feature branch upstream:
+git push --set-upstream origin email-field
+
+# Switch to the main branch and merge changes:
+git checkout main
+git merge --no-ff email-field
+
+# Push the merged changes to update the main branch:
+git push
+
+# Tag the new version and push the tag:
+git tag -a v1.3.0 -m "v1.3.0"
+git push origin v1.3.0
+```
+
+5. **Create a new branch to fix a bug**
+
+To fix the bug, a validation check was introduced in the setter method to ensure that the email follows the correct format:
+```java
+if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") ) {
+        throw new IllegalArgumentException("Invalid email format");
+}
+```
+
+6. **End of the assignment**
+
+After implementing the fix and conducting thorough testing to confirm its effectiveness, the changes were merged into the master branch, and the application version was updated to `v1.3.1` to indicate the minor fix. This version increment highlights the continuous improvement of the application's functionality and reliability. At the end of the assignment I marked the repository with the tag `ca1-part2`.
+
+## Final Results
+
+### Implementation
+Following the implementation of all the new features, the final state of the application is illustrated below:
+
+![enter image description here](https://i.postimg.cc/Wb77znpF/Captura-de-ecr-2025-03-12-155116.png)
+In our application's employee model, the fields "First Name", "Last Name", and "Description" were pre-existing components of the model and have not been modified in the scope of this project. The development enhancements began with the addition of the "Job Title" field in a prior exercise. Subsequently, during Part 1 of this CA1, the "Job Years" field was introduced to track the duration of employees' tenure within the company. The latest enhancement, implemented in Part 2 of CA1, involved adding the "Email" field, further augmenting our employee data model with contact information.
+
+### Branches
+After merging the email-field and fix-invalid-email branches, they were deleted both locally and remotely with the following comands:
+
+```shell
+# Delete the branches locally
+git branch -d email-field
+git branch -d fix-invalid-email
+
+# Delete the branches remotely
+git push origin --delete email-field
+git push origin --delete fix-invalid-email
+```
+
+Through this assignment, I learned the importance of using branches for isolating changes related to specific features or fixes. This practice not only keeps the main codebase stable but also provides a clear and organized history of changes.
+
+### Tags
+Below is a visual depiction of the project's tags, generated using the `git tag` command.
+
+![enter image description here](https://i.postimg.cc/c46Jt10R/Captura-de-ecr-2025-03-12-155712.png)
+
+The use of tags taught me how to mark specific points in the project's history as significant. This is crucial for tracking the progress of the project over time and for quickly reverting to previous versions if necessary.
+
+### Issue Tracking
+Several issues were created during the assigment. At first, opened the issues that i thought wre enhough to complete the project but the more the project evolved, more issues were created.
+
+Issues can serve multiple purposes in a project. They can be used to track bugs, feature requests, or general tasks. They can also be assigned to specific team members, have labels for easy searching, and can be linked to specific commits or pull requests.
+In future assignments, the aim is to utilize issues throughout the entire development process. This will help in managing tasks, tracking progress, and facilitating collaboration, especially when working in a team setting.
+
+
+## Alternative Solution
+In seeking an alternative to Git for version control, Subversion (SVN) offers a distinct approach with its centralized model, contrasting Git's decentralized nature. This section compares SVN to Git in terms of version control features and describes how SVN could be utilized to achieve the goals set forth in this assignment.
+
+### Comparison of SVN and Git
+
+| Feature              | SVN                                                                                             | Git                                                                                                                    |
+|----------------------|-------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| Architecture         | Centralized model, with a single repository as the authoritative source.                         | Distributed architecture, enabling multiple full-version repositories for enhanced redundancy and collaboration.       |
+| Versioning Model     | Utilizes a linear, per-file versioning system, assigning incremental version numbers per commit. | Adopts a snapshot-based approach, encapsulating the state of the entire repository at each commit for comprehensive tracking. |
+| Branching and Merging| Facilitates branch creation and merging, though the process may require more manual oversight.   | Provides efficient branching and merging capabilities, ideal for parallel development workflows.                        |
+| Binary Files Handling| Efficiently manages binary file changes through delta storage, optimizing for large binary assets.| Stores complete binary files per change, which may increase repository size but ensures ease of access to all versions.    |
+
+
+### Utilizing SVN for the Assignment
+The following sections detail how SVN could be utilized in alignment with the assignment's activities:
+
+**Initial Repository Setup and Import:** The first step involves establishing a centralized SVN repository to host the Tutorial React.js and Spring Data REST application, centralizing all version-controlled files:
+```shell
+# Create a new SVN repository
+svnadmin create /path/to/svn_repository
+
+# Import the Tutorial application into the SVN repository
+cd /path/to/TutorialReactSpringDataREST
+svn import . file:///path/to/svn_repository/my_project -m "Initial import"
+```
+**Feature Development and Branch Management:** With the repository in place, development begins by creating branches for new features, mirroring the branching strategy used in Git:
+```shell
+# Create a branch for the new feature
+svn copy file:///path/to/svn_repository/my_project/trunk file:///path/to/svn_repository/my_project/branches/feature-branch -m "Creating feature branch"
+```
+**Continuous Integration: Committing and Tagging:** As changes are made, they are committed to the appropriate branches, ensuring a detailed history of development. Stable versions are marked using SVN tags:
+```shell
+# Commit changes within the feature branch
+cd /path/to/working_copy/feature-branch
+svn commit -m "Implemented new feature"
+
+# Tag a stable release
+svn copy file:///path/to/svn_repository/my_project/trunk file:///path/to/svn_repository/my_project/tags/v1.0 -m "Tagging version 1.0"
+```
+**Merging Features and Preparing for Deployment:** Upon completion of feature development and thorough testing, features can be merged back into the trunk, and the repository is prepared for deployment:
+```shell
+# Merge the feature branch back into the trunk
+svn merge --reintegrate file:///path/to/svn_repository/my_project/branches/feature-branch /path/to/working_copy/trunk
+svn commit -m "Merged feature branch into trunk"
+```
+By tailoring SVN's features to fit the requirements of this assignment, a workflow similar to Git's can be achieved, showcasing the adaptability of version control systems in software development environments.
+
+## Conclusion
+Completing the Version Control with Git assignment has greatly expanded my knowledge of version control systems and their significance in software development. Part 1 of the assignment established a strong foundation in version control by focusing on direct modifications to the master branch, emphasizing the fundamental practices of committing and tagging. The transition to Part 2, which introduced branching, provided deeper insights into managing complex scenarios, such as adding new features and fixing bugs. This demonstrated the importance of isolating changes to maintain a clear project history and streamline management.
+
+The Final Results section of this report highlights the practical outcomes of this learning experience, showcasing the application's improved functionality through the step-by-step addition of new features. This visual representation reinforces the real-world application of version control principles. Additionally, GitHub issues were leveraged for tracking and managing problems, offering a structured history of challenges and their resolutions. This practice underscored the versatility and effectiveness of issue tracking in software development.
+
+Exploring SVN as an Alternative Solution to Git provided valuable insights into different version control methodologies. By comparing SVN's centralized system with Git's distributed model, I gained a broader understanding of how various approaches can be tailored to fit specific project needs, emphasizing the adaptability required in modern DevOps practices.
+
+This assignment not only strengthened my technical proficiency in Git and introduced me to SVN but also highlighted the crucial role of version control in fostering collaboration, maintaining code integrity, and efficiently managing project development.
