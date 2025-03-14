@@ -68,3 +68,10 @@ tasks.register('runServer', JavaExec) {
 
     args '59001'
 }
+
+tasks.register('backupSources', Copy) {
+    group = "Backup"
+    description = "Creates a backup of the source files"
+    from 'src'
+    into "$buildDir/backup"
+}
