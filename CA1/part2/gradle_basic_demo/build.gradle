@@ -75,3 +75,11 @@ tasks.register('backupSources', Copy) {
     from 'src'
     into "$buildDir/backup"
 }
+
+tasks.register('zipSources', Zip) {
+    group = "Backup"
+    description = "Archives the source files into a zip"
+    from 'src'
+    archiveFileName = "sources.zip"
+    destinationDirectory = file("$buildDir/backup")
+}
