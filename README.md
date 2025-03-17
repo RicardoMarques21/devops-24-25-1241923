@@ -14,12 +14,15 @@
 
 - [Introduction](#introduction)
 - [Environment Setup](#environment-setup)
-- [Part 1: Development Without Branches](#part-1-development-without-branches)
-    - [Goals and Requirements](#goals-and-requirements)
-    - [Key Developments](#key-developments)
-- [Part 2: Development Using Branches](#part-2-development-using-branches)
-  - [Goals and Requirements](#goals-and-requirements-1)
-  - [Key Developments](#key-developments-1)
+- [Part 1.1: Development Without Branches](#part-11-development-without-branches)
+  - [Goals and Requirements (Part 1.1)](#goals-and-requirements-part-11)
+  - [Key Developments (Part 1.1)](#key-developments-part-11)
+- [Part 1.2: Development Using Branches](#part-12-development-using-branches)
+  - [Goals and Requirements (Part 1.2)](#goals-and-requirements-part-12)
+  - [Key Developments (Part 1.2)](#key-developments-part-12)
+- [Part 2: Gradle Tasks and Testing Tutorial](#part-2-gradle-tasks-and-testing-tutorial)
+  - [Goals and Requirements (Part 2)](#goals-and-requirements-part-2)
+  - [Key Developments (Part 2)](#key-developments-part-2)
 - [Final Results](#final-results)
   - [Implementation](#implementation)
   - [Branches](#branches)
@@ -30,16 +33,22 @@
   - [Utilizing SVN for the Assignment](#utilizing-svn-for-the-assignment)
 - [Conclusion](#conclusion)
 
+
+
 ## Introduction
 This report details the **Version Control with Git** assignment for the DevOps course. 
 
-**Part 1** is just using basic version control without branches.
-**Part 2** is implementing branching for new features and bug fixes.
+## CA1: Part1:
+
+**Part 1.1** is just using basic version control without branches.  
+**Part 1.2** is implementing branching for new features and bug fixes.
 
 ## Environment Setup
 Initially, I cloned an existing repository containing the Tutorial React.js and Spring Data REST application to have a local copy of the tutorial project. Following this, I set up my own repository to host the class assignments and ensure that all developments were tracked under my version control.
 
 **Creating My Repository:** I created a new folder on my local machine for the DevOps class assignments and initialized it as a Git repository. This was the first step in establishing my workspace for the project.
+
+**Part 1.1 and Part 1.2**
 ```shell
 mkdir ~/devops-24-25-1241923
 cd ~/devops-24-25-1241923
@@ -66,17 +75,37 @@ Reflecting on the process, I now recognize the importance of a clear initial com
 ```shell
 git push -u origin master
 ```
+
+**Part 2**
+
+1. **Download and Prepare the Example Application:**
+
+  - Clone or download the application from Bitbucket:
+    ```shell
+    git clone https://bitbucket.org/pssmatos/gradle_basic_demo/
+    ```
+  - Remove the `.git` folder to start with a fresh repository:
+    ```shell
+    rm -rf gradle_basic_demo/.git
+    ```
+  - Move the project into your Part 2 folder:
+    ```shell
+    mkdir -p ~/devops-24-25-1241923/CA1/part2
+    mv gradle_basic_demo ~/devops-24-25-1241923/CA1/part2/
+    cd ~/devops-24-25-1241923/CA1/part2/gradle_basic_demo
+    ```
+
 This process ensured that I had a clean, organized start to the class assignments, with a clear link to the foundational tutorial application while maintaining my repository for all subsequent developments.
 
-## Part 1: Development Without Branches
+## Part 1.1: Development Without Branches
 
-### Goals and Requirements
+### Goals and Requirements (Part 1.1)
 -   The initial part of the assignment focuses on understanding and utilizing basic version control operations without branching.
 -   Tasks include setting up the project environment, making changes directly to the master branch, and committing those changes.
 -   A key requirement is to introduce a new feature (e.g., adding a `jobYears` field to an Employee object) and ensuring proper version tagging, starting with an initial version and updating it after adding the new feature.
 -   The emphasis is on practicing commits, understanding the commit history, and using tags for versioning.
 
-### Key Developments
+### Key Developments (Part 1.1)
 In the first part, all development was done in the master branch. The steps included:
 
 1. **Tagging the repository to mark the version of the application.**
@@ -253,22 +282,22 @@ class Employee extends React.Component{
     }
 }
 ```
-5. **Debug the server and client parts of the solution.**
+3. **Debug the server and client parts of the solution.**
 
 After verifying the `jobYears` field's integration, I ran the application using `./mvnw spring-boot:run` to test its real-time functionality at `http://localhost:8080/`. This step was crucial for hands-on testing of the feature within the application's interface, ensuring its seamless operation and compatibility with existing functionalities. Concurrently, I conducted a thorough code review to check data handling on the server side and the accurate representation of `jobYears` on the client side, guaranteeing the feature's correctness and maintaining high code quality. I also set on the application.properties `logging.level.root=DEBUG`to enable detailed logging for all components of the application, including Spring Boot, libraries, and custom code and help troubleshoot issues by showing more verbose output than INFO or WARN levels.
 
-6. **End of the assignment**
+4. **End of the assignment**
 
 After ensuring the stability and performance of the new feature, I committed the changes to the repository with a clear and descriptive message detailing the enhancements. Then, I pushed the updated code to the remote server, enabling seamless collaboration with the team and maintaining the project's workflow. To highlight this significant update, I tagged the commit as `v1.2.0`, adhering to the project's semantic versioning standard. Finally, at the conclusion of the assignment, I marked the repository with the tag `ca1-part1`.
 
-## Part 2: Development Using Branches
+## Part 1.2: Development Using Branches
 
-### Goals and Requirements
+### Goals and Requirements (Part 1.2)
 -   The second part advances to using branches for feature development and bug fixes, emphasizing isolated development environments and merge strategies.
 -   Requirements include creating feature branches for new developments or bug fixes, ensuring that changes do not interfere with the main codebase until they are ready to be merged.
 -   The part concludes with tagging the master branch after successful merges to mark new versions of the application, showcasing effective branch management and integration in version control.
 
-### Key Developments
+### Key Developments (Part 1.2)
 In the second part, the focus shifted towards utilizing branch-based development to enhance the application's features and fix any existing bugs, ensuring that the master branch remained stable for "publishing" the stable versions of the Tutorial React.js and Spring Data REST Application.
 
 The steps for adding new features and fixing bugs are similar to those described in Part 1. Therefore, to avoid repetition, I will not show all the code again. The main difference here is the use of branches. Here are the main steps:
@@ -326,13 +355,108 @@ if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") ) {
 
 After implementing the fix and conducting thorough testing to confirm its effectiveness, the changes were merged into the master branch, and the application version was updated to `v1.3.1` to indicate the minor fix. This version increment highlights the continuous improvement of the application's functionality and reliability. At the end of the assignment I marked the repository with the tag `ca1-part2`.
 
+## Part 2: Gradle Tasks and Testing Tutorial
+
+### Goals and Requirements (Part 2)
+
+This document details the steps to enhance your Gradle project by adding tasks to run the server, execute unit tests, backup sources, archive the sources, and finally tag your repository.
+
+### Key Developments (Part 2)
+
+**1. Adding a New Task to Execute the Server**
+
+Edit your `build.gradle` file to add a Gradle task that runs the server. For example:
+
+```gradle
+tasks.register('runServer', JavaExec) {
+    group = "DevOps"
+    description = "Runs a chat server"
+
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = "basic_demo.ChatServerApp"
+
+    args '59001'
+}
+```
+
+Run the server
+
+```gradle
+./gradlew runServer
+```
+
+**2. Adding a Unit Test and Updating the Gradle Script**
+
+Update dependencies
+```gradle
+dependencies {
+  testImplementation 'junit:junit:4.12'
+  }
+  ```
+Create directory test
+```shell
+mkdir src/test/java/basic_demo/AppTest.java
+```
+
+Run the Unit test
+```shell
+./gradlew test
+```
+
+**3. Adding a Task to Backup the Sources (Copy Task)**
+```gradle
+tasks.register('backupSources', Copy) {
+    group = "Backup"
+    description = "Creates a backup of the source files"
+    from 'src'
+    into "$buildDir/backup"
+}
+```
+
+To run the backup task, execute:
+```shell
+./gradlew backupSources
+```
+
+**4. Adding a Task to Archive the Sources (Zip Task)**
+```gradle
+tasks.register('zipSources', Zip) {
+group = "Backup"
+description = "Archives the source files into a zip file"
+from 'src'
+archiveFileName = "sources.zip"
+destinationDirectory = file("$buildDir/backup")
+}
+```
+
+To run the backup task, execute:
+```shell
+./gradlew backupSources
+```
+
+**5. Tagging the Repository**
+```shell
+git tag -a ca1-part2 -m "Finish Part2 assigment"
+git push origin ca1-part2
+```
+
 ## Final Results
 
 ### Implementation
+### CA1 - Part1
 Following the implementation of all the new features, the final state of the application is illustrated below:
 
 ![enter image description here](https://i.postimg.cc/Wb77znpF/Captura-de-ecr-2025-03-12-155116.png)
 In our application's employee model, the fields "First Name", "Last Name", and "Description" were pre-existing components of the model and have not been modified in the scope of this project. The development enhancements began with the addition of the "Job Title" field in a prior exercise. Subsequently, during Part 1 of this CA1, the "Job Years" field was introduced to track the duration of employees' tenure within the company. The latest enhancement, implemented in Part 2 of CA1, involved adding the "Email" field, further augmenting our employee data model with contact information.
+
+### CA1 - Part2
+
+![enter image description here](https://i.postimg.cc/QxGCwr8F/Captura-de-ecr-2025-03-16-094650.png)  
+The Server and the Client are communicating, creating a localhost chat.
+
+![enter image description here](https://i.postimg.cc/vB5THPXY/Captura-de-ecr-2025-03-16-094955.png)  
+In our project structure, we can see the backup directory containing all the code and the zip file, as intended.
+
 
 ### Branches
 After merging the email-field and fix-invalid-email branches, they were deleted both locally and remotely with the following comands:
@@ -347,17 +471,19 @@ git push origin --delete email-field
 git push origin --delete fix-invalid-email
 ```
 
-Through this assignment, I learned the importance of using branches for isolating changes related to specific features or fixes. This practice not only keeps the main codebase stable but also provides a clear and organized history of changes.
+Through Part1, I learned the importance of using branches for isolating changes related to specific features or fixes. This practice not only keeps the main codebase stable but also provides a clear and organized history of changes.
+
+Through Part 2, I learned how to work with Gradle by creating new tasks and updating dependencies.
 
 ### Tags
 Below is a visual depiction of the project's tags, generated using the `git tag` command.
 
-![enter image description here](https://i.postimg.cc/c46Jt10R/Captura-de-ecr-2025-03-12-155712.png)
+![enter image description here](https://i.postimg.cc/Kj53NZK3/Captura-de-ecr-2025-03-16-100324.png)
 
 The use of tags taught me how to mark specific points in the project's history as significant. This is crucial for tracking the progress of the project over time and for quickly reverting to previous versions if necessary.
 
 ### Issue Tracking
-Several issues were created during the assigment. At first, opened the issues that i thought wre enhough to complete the project but the more the project evolved, more issues were created.
+Several issues were created during the assignment. Initially, I opened only the issues I thought were enough to complete the project, but as the project evolved, more issues emerged.
 
 Issues can serve multiple purposes in a project. They can be used to track bugs, feature requests, or general tasks. They can also be assigned to specific team members, have labels for easy searching, and can be linked to specific commits or pull requests.
 In future assignments, the aim is to utilize issues throughout the entire development process. This will help in managing tasks, tracking progress, and facilitating collaboration, especially when working in a team setting.
@@ -411,10 +537,12 @@ svn commit -m "Merged feature branch into trunk"
 By tailoring SVN's features to fit the requirements of this assignment, a workflow similar to Git's can be achieved, showcasing the adaptability of version control systems in software development environments.
 
 ## Conclusion
-Completing the Version Control with Git assignment has greatly expanded my knowledge of version control systems and their significance in software development. Part 1 of the assignment established a strong foundation in version control by focusing on direct modifications to the master branch, emphasizing the fundamental practices of committing and tagging. The transition to Part 2, which introduced branching, provided deeper insights into managing complex scenarios, such as adding new features and fixing bugs. This demonstrated the importance of isolating changes to maintain a clear project history and streamline management.
+Completing the Version Control with Git assignment has greatly expanded my knowledge of version control systems and their significance in software development. Part 1.1 of the assignment established a strong foundation in version control by focusing on direct modifications to the master branch, emphasizing the fundamental practices of committing and tagging. The transition to Part 1.2, which introduced branching, provided deeper insights into managing complex scenarios, such as adding new features and fixing bugs. This demonstrated the importance of isolating changes to maintain a clear project history and streamline management.
 
 The Final Results section of this report highlights the practical outcomes of this learning experience, showcasing the application's improved functionality through the step-by-step addition of new features. This visual representation reinforces the real-world application of version control principles. Additionally, GitHub issues were leveraged for tracking and managing problems, offering a structured history of challenges and their resolutions. This practice underscored the versatility and effectiveness of issue tracking in software development.
 
 Exploring SVN as an Alternative Solution to Git provided valuable insights into different version control methodologies. By comparing SVN's centralized system with Git's distributed model, I gained a broader understanding of how various approaches can be tailored to fit specific project needs, emphasizing the adaptability required in modern DevOps practices.
 
-This assignment not only strengthened my technical proficiency in Git and introduced me to SVN but also highlighted the crucial role of version control in fostering collaboration, maintaining code integrity, and efficiently managing project development.
+Furthermore, the Gradle component of Part 2 further enhanced my technical proficiency by teaching me how to create and configure custom tasks. Learning to execute the server, run unit tests, backup the source code, and generate zip archives not only streamlined the build and deployment process but also deepened my understanding of build automation. This hands-on experience with Gradle has equipped me with practical skills in managing project builds and dependencies, which are crucial in contemporary software development environments.
+
+Overall, this assignment not only strengthened my expertise in Git and introduced me to SVN but also highlighted the crucial role of build automation and version control in fostering collaboration, maintaining code integrity, and efficiently managing project development.
