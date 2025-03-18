@@ -46,3 +46,10 @@ tasks.register('copyJar', Copy) {
 	into("${rootDir}/dist")
 	include("*.jar")
 }
+
+tasks.register('cleanWebpack', Delete) {
+	delete fileTree("${projectDir}/src/main/resources/static/built/")
+}
+
+clean.dependsOn(cleanWebpack)
+
