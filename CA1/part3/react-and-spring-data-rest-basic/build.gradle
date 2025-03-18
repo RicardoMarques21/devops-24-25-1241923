@@ -39,3 +39,10 @@ frontend {
 	cleanScript = "run clean"
 	checkScript = "run check"
 }
+
+tasks.register('copyJar', Copy) {
+	dependsOn build
+	from("${buildDir}/libs")
+	into("${rootDir}/dist")
+	include("*.jar")
+}
