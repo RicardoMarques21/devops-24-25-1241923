@@ -23,14 +23,18 @@
 - [Part 2: Gradle Tasks and Testing Tutorial](#part-2-gradle-tasks-and-testing-tutorial)
   - [Goals and Requirements (Part 2)](#goals-and-requirements-part-2)
   - [Key Developments (Part 2)](#key-developments-part-2)
+- [Part 3: Converting the basic version of the Tutorial application to Gradle](#part-3-converting-the-basic-version-of-the-tutorial-application-to-gradle)
+  - [Goals and Requirements (Part 3)](#goals-and-requirements-part-3)
+  - [Key Developments (Part 3)](#key-developments-part-3)
 - [Final Results](#final-results)
   - [Implementation](#implementation)
   - [Branches](#branches)
   - [Tags](#tags)
   - [Issue Tracking](#issue-tracking)
-- [Alternative Solution](#alternative-solution)
+- [Alternative Solutions](#alternative-solutions)
   - [Comparison of SVN and Git](#comparison-of-svn-and-git)
-  - [Utilizing SVN for the Assignment](#utilizing-svn-for-the-assignment)
+  - [Utilizing SVN for the Assignment part 1.1](#utilizing-svn-for-the-assignment-part-11)
+  - [Alternative solution to Gradle: Maven](#alternative-solution-to-gradle-maven)
 - [Conclusion](#conclusion)
 
 
@@ -38,10 +42,18 @@
 ## Introduction
 This report details the **Version Control with Git** assignment for the DevOps course. 
 
-## CA1: Part1:
+### CA1: Part1:
 
 **Part 1.1** is just using basic version control without branches.  
 **Part 1.2** is implementing branching for new features and bug fixes.
+
+### CA1: Part2:
+
+Implementing and testing a Gradle project.
+
+### CA1: Part3:
+
+Transforming a Maven ina Gradle project.
 
 ## Environment Setup
 Initially, I cloned an existing repository containing the Tutorial React.js and Spring Data REST application to have a local copy of the tutorial project. Following this, I set up my own repository to host the class assignments and ensure that all developments were tracked under my version control.
@@ -49,21 +61,21 @@ Initially, I cloned an existing repository containing the Tutorial React.js and 
 **Creating My Repository:** I created a new folder on my local machine for the DevOps class assignments and initialized it as a Git repository. This was the first step in establishing my workspace for the project.
 
 **Part 1.1 and Part 1.2**
-```shell
+```bash
 mkdir ~/devops-24-25-1241923
 cd ~/devops-24-25-1241923
 git init
 ```
 **Copying the Tutorial Application:** To integrate the tutorial application into my project, its contents were copied into my repository. This action ensured that all essential files for the assignment were available within my version control system.
-```shell
+```bash
 cp -r ~/tutorial ~/devops-24-25-1241923
 ```
 **Linking to GitHub:** With the tutorial application copied into my repository, I then linked my local repository to a new GitHub repository. This connection allowed me to push my changes to a remote server, facilitating backup and sharing.
-```shell
+```bash
 git remote add origin <repository-URL>
 ```
 **First Commit:** After setting up the repository and ensuring all files were in place, I added the basic project to the repository. This initial change was committed with the message "Add basic project to repository", marking the commencement of my work on the assignments.
-```shell
+```bash
 mkdir CA1
 cp -r ~/devops-24-25-1241923/CA1
 git add .
@@ -72,7 +84,7 @@ git commit -m "Add basic project to repository"
 Reflecting on the process, I now recognize the importance of a clear initial commit message, such as "initial commit". This practice sets a clear starting point for the repository's history and is considered a good standard in version control workflows.
 
 **Pushing to Remote:** Finally, I pushed my initial commit to the GitHub repository, officially starting the version history of my assignments in a remote location.
-```shell
+```bash
 git push -u origin master
 ```
 
@@ -81,21 +93,23 @@ git push -u origin master
 1. **Download and Prepare the Example Application:**
 
   - Clone or download the application from Bitbucket:
-    ```shell
+    ```bash
     git clone https://bitbucket.org/pssmatos/gradle_basic_demo/
     ```
   - Remove the `.git` folder to start with a fresh repository:
-    ```shell
+    ```bash
     rm -rf gradle_basic_demo/.git
     ```
   - Move the project into your Part 2 folder:
-    ```shell
+    ```bash
     mkdir -p ~/devops-24-25-1241923/CA1/part2
     mv gradle_basic_demo ~/devops-24-25-1241923/CA1/part2/
     cd ~/devops-24-25-1241923/CA1/part2/gradle_basic_demo
     ```
 
 This process ensured that I had a clean, organized start to the class assignments, with a clear link to the foundational tutorial application while maintaining my repository for all subsequent developments.
+
+[⬆ Back to Top](#Table-of-contents)
 
 ## Part 1.1: Development Without Branches
 
@@ -111,7 +125,7 @@ In the first part, all development was done in the master branch. The steps incl
 1. **Tagging the repository to mark the version of the application.**
 
 Following the versioning pattern outlined in the assignment, major.minor.revision, I tagged the initial setup as `v1.1.0` and subsequently pushed this tag to the remote repository:
-```shell
+```bash
 git tag -a v1.1.0 -m "v1.1.0"
 git push origin v1.1.0
 ```
@@ -290,6 +304,8 @@ After verifying the `jobYears` field's integration, I ran the application using 
 
 After ensuring the stability and performance of the new feature, I committed the changes to the repository with a clear and descriptive message detailing the enhancements. Then, I pushed the updated code to the remote server, enabling seamless collaboration with the team and maintaining the project's workflow. To highlight this significant update, I tagged the commit as `v1.2.0`, adhering to the project's semantic versioning standard. Finally, at the conclusion of the assignment, I marked the repository with the tag `ca1-part1`.
 
+[⬆ Back to Top](#Table-of-contents)
+
 ## Part 1.2: Development Using Branches
 
 ### Goals and Requirements (Part 1.2)
@@ -309,7 +325,7 @@ To ensure I was working in the correct branch, particularly the master branch fo
 2. **Develop new features in branches**
 
 During the development phase of adding an email field to our application, effective branch management was crucial. The following command creates a new branch named email-field and switches to it:
-```shell
+```bash
 git checkout -b email-field
 ```
 3. **Integration and Testing of the Email Field**
@@ -322,7 +338,7 @@ The process of adding support for the email field in the application and ensurin
 4. **Merge the code with the master**
 
 The completion of the email field feature involved a series of steps to integrate the changes into the main branch and update the application's version. Initially, the finalized changes in the `email-field` branch were committed. This branch was then pushed to the remote repository, setting the stage for merging into the main branch. To preserve the history, a no-fast-forward merge was used. After merging, the changes were pushed to the remote repository to update the main branch. Finally, the new version was tagged and pushed to mark this significant update. The commands used were as follows:
-```shell
+```bash
 # Commit the feature changes:
 git add .
 git commit -m "email field added"
@@ -354,6 +370,8 @@ if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") ) {
 6. **End of the assignment**
 
 After implementing the fix and conducting thorough testing to confirm its effectiveness, the changes were merged into the master branch, and the application version was updated to `v1.3.1` to indicate the minor fix. This version increment highlights the continuous improvement of the application's functionality and reliability. At the end of the assignment I marked the repository with the tag `ca1-part2`.
+
+[⬆ Back to Top](#Table-of-contents)
 
 ## Part 2: Gradle Tasks and Testing Tutorial
 
@@ -399,7 +417,7 @@ mkdir src/test/java/basic_demo/AppTest.java
 ```
 
 Run the Unit test
-```shell
+```bash
 ./gradlew test
 ```
 
@@ -414,7 +432,7 @@ tasks.register('backupSources', Copy) {
 ```
 
 To run the backup task, execute:
-```shell
+```bash
 ./gradlew backupSources
 ```
 
@@ -430,19 +448,106 @@ destinationDirectory = file("$buildDir/backup")
 ```
 
 To run the backup task, execute:
-```shell
+```bash
 ./gradlew backupSources
 ```
 
 **5. Tagging the Repository**
-```shell
+```bash
 git tag -a ca1-part2 -m "Finish Part2 assigment"
 git push origin ca1-part2
+```
+
+[⬆ Back to Top](#Table-of-contents)
+
+## Part 3: Converting the basic version of the Tutorial application to Gradle
+
+### Goals and Requirements (Part 3)
+
+In this part of the assignment, the goal is to convert the "basic" version of the Tutorial application to Gradle, instead of Maven.
+
+### Key Developments (Part 3)
+
+**1. Create a new Gradle Spring Boot project using https://start.spring.io.**
+
+![enter image description here](https://i.postimg.cc/y84R1D5b/Captura-de-ecr-2025-03-19-100240.png)
+
+**2. Create part3 directory and copy files from part1 (basic with webpack.config.js and package.json and without src).**
+
+```bash
+rm -rf src - eliminar pasta src
+cp -pr part1/basic/src part3/react-and-spring-data-rest-basic/ 
+cp -p part1/basic/webpack.config.js part3/react-and-spring-data-rest-basic/
+cp -p part1/basic/package.json part3/react-and-spring-data-rest-basic/
+rm -rf src/main/resources/static/built/
+```
+
+Then run:
+```bash
+./gradlew bootRun
+```
+
+**3. Add org.siouan.frontend plugin and other updates to build.gradle.**
+```gradle
+id "org.siouan.frontend-jdk17" version "8.0.0
+
+frontend {
+nodeVersion = "16.20.2"
+assembleScript = "run build"
+cleanScript = "run clean"
+checkScript = "run check"
+}
+
+"scripts": {
+"webpack": "webpack",
+"build": "npm run webpack",
+"check": "echo Checking frontend",
+"clean": "echo Cleaning frontend",
+"lint": "echo Linting frontend",
+"test": "echo Testing frontend"
+}
+```
+
+
+**4. Add a task to gradle to copy the generated jar to a folder named ”dist” located a the project root folder level.**
+```gradle
+tasks.register('copyJar', Copy) {
+	dependsOn build
+	from("${buildDir}/libs")
+	into("${rootDir}/dist")
+	include("*.jar")
+}
+```
+
+Then run:
+```bash
+./gradlew copyJar
+```
+
+![enter image description here](https://i.postimg.cc/7hC7xgYc/Captura-de-ecr-2025-03-19-111636.png)
+
+**5. Add a task to gradle to delete all the files generated by webpack.**
+```gradle
+tasks.register('cleanWebpack', Delete) {
+delete fileTree("${projectDir}/src/main/resources/static/built/")
+}
+
+clean.dependsOn(cleanWebpack)
+```
+Then run:
+```bash
+./gradlew clean
+```
+
+After running the command, it must be run the command to built webpack:
+```bash
+npm run build
 ```
 
 ## Final Results
 
 ### Implementation
+
 ### CA1 - Part1
 Following the implementation of all the new features, the final state of the application is illustrated below:
 
@@ -457,23 +562,34 @@ The Server and the Client are communicating, creating a localhost chat.
 ![enter image description here](https://i.postimg.cc/vB5THPXY/Captura-de-ecr-2025-03-16-094955.png)  
 In our project structure, we can see the backup directory containing all the code and the zip file, as intended.
 
+### CA1 - Part3
+
+![enter image description here](https://i.postimg.cc/qvNG4bLk/Captura-de-ecr-2025-03-19-113859.png)
+We can see the app running in Gradle, just like in Maven in part1.
+
+
+[⬆ Back to Top](#Table-of-contents)
 
 ### Branches
 After merging the email-field and fix-invalid-email branches, they were deleted both locally and remotely with the following comands:
 
-```shell
+```bash
 # Delete the branches locally
 git branch -d email-field
 git branch -d fix-invalid-email
+git branch -d tut-basic-gradle
 
 # Delete the branches remotely
 git push origin --delete email-field
 git push origin --delete fix-invalid-email
+git push origin --delete tut-basic-gradle
 ```
 
 Through Part1, I learned the importance of using branches for isolating changes related to specific features or fixes. This practice not only keeps the main codebase stable but also provides a clear and organized history of changes.
 
-Through Part 2, I learned how to work with Gradle by creating new tasks and updating dependencies.
+Through Part 3, after implementing and testing all new features, the branch tut-basic-gradle was merged to main branch.
+
+[⬆ Back to Top](#Table-of-contents)
 
 ### Tags
 Below is a visual depiction of the project's tags, generated using the `git tag` command.
@@ -482,14 +598,17 @@ Below is a visual depiction of the project's tags, generated using the `git tag`
 
 The use of tags taught me how to mark specific points in the project's history as significant. This is crucial for tracking the progress of the project over time and for quickly reverting to previous versions if necessary.
 
+[⬆ Back to Top](#Table-of-contents)
+
 ### Issue Tracking
 Several issues were created during the assignment. Initially, I opened only the issues I thought were enough to complete the project, but as the project evolved, more issues emerged.
 
 Issues can serve multiple purposes in a project. They can be used to track bugs, feature requests, or general tasks. They can also be assigned to specific team members, have labels for easy searching, and can be linked to specific commits or pull requests.
 In future assignments, the aim is to utilize issues throughout the entire development process. This will help in managing tasks, tracking progress, and facilitating collaboration, especially when working in a team setting.
 
+[⬆ Back to Top](#Table-of-contents)
 
-## Alternative Solution
+## Alternative Solutions
 In seeking an alternative to Git for version control, Subversion (SVN) offers a distinct approach with its centralized model, contrasting Git's decentralized nature. This section compares SVN to Git in terms of version control features and describes how SVN could be utilized to achieve the goals set forth in this assignment.
 
 ### Comparison of SVN and Git
@@ -502,47 +621,184 @@ In seeking an alternative to Git for version control, Subversion (SVN) offers a 
 | Binary Files Handling| Efficiently manages binary file changes through delta storage, optimizing for large binary assets.| Stores complete binary files per change, which may increase repository size but ensures ease of access to all versions.    |
 
 
-### Utilizing SVN for the Assignment
+### Utilizing SVN for the Assignment part 1.1
 The following sections detail how SVN could be utilized in alignment with the assignment's activities:
 
 **Initial Repository Setup and Import:** The first step involves establishing a centralized SVN repository to host the Tutorial React.js and Spring Data REST application, centralizing all version-controlled files:
-```shell
+```bash
 # Create a new SVN repository
-svnadmin create /path/to/svn_repository
+svnadmin create /home/user/CA1/svn_repo
 
 # Import the Tutorial application into the SVN repository
-cd /path/to/TutorialReactSpringDataREST
-svn import . file:///path/to/svn_repository/my_project -m "Initial import"
+cd /home/user/CA1/part1
+svn import . file:///home/user/CA1/svn_repo/trunk/part1 -m "Initial import with jobField"
 ```
-**Feature Development and Branch Management:** With the repository in place, development begins by creating branches for new features, mirroring the branching strategy used in Git:
-```shell
-# Create a branch for the new feature
-svn copy file:///path/to/svn_repository/my_project/trunk file:///path/to/svn_repository/my_project/branches/feature-branch -m "Creating feature branch"
-```
-**Continuous Integration: Committing and Tagging:** As changes are made, they are committed to the appropriate branches, ensuring a detailed history of development. Stable versions are marked using SVN tags:
-```shell
-# Commit changes within the feature branch
-cd /path/to/working_copy/feature-branch
-svn commit -m "Implemented new feature"
 
-# Tag a stable release
-svn copy file:///path/to/svn_repository/my_project/trunk file:///path/to/svn_repository/my_project/tags/v1.0 -m "Tagging version 1.0"
+**Continuous Integration: Committing and Tagging:** Adding jobYears field, testing, fixing bugs:
+
+```bash
+# Tag version 1.1.0
+svn copy file:///home/user/CA1/svn_repo/trunk/part1 file:///home/user/CA1/svn_repo/tags/v1.1.0 -m "Tagging version 1.1.0"
+
+# Added jobYears field and commit
+svn commit -m "Added jobYears field to Employee entity, updated frontend, and added unit tests"
+
+# Testing and fixing bugs
+svn commit -m "Fixed bugs found during testing"
+
+# Tag version 1.2.0
+svn copy file:///home/user/CA1/svn_repo/trunk file:///home/user/CA1/svn_repo/tags/v1.2.0 -m "Tagging version 1.2.0"
+
+# Tag repository ca1-part1.1
+svn copy file:///home/user/CA1/svn_repo/trunk file:///home/user/CA1/svn_repo/tags/ca1-part1.1 -m "Final tag for CA1 Part 1.1"
 ```
-**Merging Features and Preparing for Deployment:** Upon completion of feature development and thorough testing, features can be merged back into the trunk, and the repository is prepared for deployment:
-```shell
-# Merge the feature branch back into the trunk
-svn merge --reintegrate file:///path/to/svn_repository/my_project/branches/feature-branch /path/to/working_copy/trunk
-svn commit -m "Merged feature branch into trunk"
-```
+
 By tailoring SVN's features to fit the requirements of this assignment, a workflow similar to Git's can be achieved, showcasing the adaptability of version control systems in software development environments.
 
+## Alternative solution to Gradle: Maven
+
+**Implementing the Assignment Goals with Maven**
+
+To match the setup and functionality achieved with Gradle, I will outline the steps required to configure Maven for the Spring Boot application.
+This alternative solution will mirror the Gradle setup, including the integration of frontend assets, custom build tasks, and file management.
+Here’s a detailed step-by-step guide on setting up Maven for our Spring Boot application, including the necessary pom.xml configurations:
+
+- **Project Setup:**
+  I created a `pom.xml` for the Spring Boot application, including dependencies for REST, Thymeleaf, JPA, and H2.
+  Here is a snippet of the pom.xml that includes these dependencies:
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-rest</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+</dependencies>
+```
+
+- **Frontend Integration:**
+  It was necessary to configure the frontend-maven-plugin to handle Node and npm installation as well as building the frontend:
+```xml
+<plugins>
+    <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.11.0</version>
+        <configuration>
+            <nodeVersion>v16.20.2</nodeVersion>
+            <workingDirectory>src/main/resources/static</workingDirectory>
+        </configuration>
+        <executions>
+            <execution>
+                <id>install node and npm</id>
+                <goals>
+                    <goal>install-node-and-npm</goal>
+                </goals>
+            </execution>
+            <execution>
+                <id>npm install</id>
+                <goals>
+                    <goal>npm</goal>
+                    <configuration>
+                        <arguments>install</arguments>
+                    </configuration>
+                </goals>
+            </execution>
+            <execution>
+                <id>npm run build</id>
+                <goals>
+                    <goal>npm</goal>
+                    <configuration>
+                        <arguments>run build</arguments>
+                    </configuration>
+                </goals>
+            </execution>
+        </executions>
+    </plugin>
+</plugins>
+```
+
+- **Copy JAR Task:** To copy the generated .jar file to a distribution folder, the maven-resources-plugin was configured:
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-resources-plugin</artifactId>
+    <version>3.2.0</version>
+    <executions>
+        <execution>
+            <id>copy-jar</id>
+            <phase>package</phase>
+            <goals>
+                <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+                <outputDirectory>${project.build.directory}/dist</outputDirectory>
+                <resources>
+                    <resource>
+                        <directory>${project.build.directory}</directory>
+                        <includes>
+                            <include>*.jar</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
+
+- **Delete Webpack Files Task:** To delete the Webpack-generated files, the maven-clean-plugin was configured:
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-clean-plugin</artifactId>
+    <version>3.1.0</version>
+    <executions>
+        <execution>
+            <id>delete-webpack-files</id>
+            <phase>clean</phase>
+            <goals>
+                <goal>clean</goal>
+            </goals>
+            <configuration>
+                <filesets>
+                    <fileset>
+                        <directory>src/main/resources/static/built</directory>
+                        <includes>
+                            <include>*</include>
+                        </includes>
+                    </fileset>
+                </filesets> 
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
+[⬆ Back to Top](#Table-of-contents)
+
 ## Conclusion
-Completing the Version Control with Git assignment has greatly expanded my knowledge of version control systems and their significance in software development. Part 1.1 of the assignment established a strong foundation in version control by focusing on direct modifications to the master branch, emphasizing the fundamental practices of committing and tagging. The transition to Part 1.2, which introduced branching, provided deeper insights into managing complex scenarios, such as adding new features and fixing bugs. This demonstrated the importance of isolating changes to maintain a clear project history and streamline management.
+Completing the Version Control with Git assignment has significantly broadened my understanding of version control systems and their critical role in software development. Part 1.1 established a strong foundation by focusing on direct modifications to the master branch, reinforcing essential practices such as committing and tagging. The transition to Part 1.2 introduced branching, offering deeper insights into managing complex scenarios like adding new features and fixing bugs. This demonstrated the importance of isolating changes to maintain a structured project history and facilitate streamlined management.
 
-The Final Results section of this report highlights the practical outcomes of this learning experience, showcasing the application's improved functionality through the step-by-step addition of new features. This visual representation reinforces the real-world application of version control principles. Additionally, GitHub issues were leveraged for tracking and managing problems, offering a structured history of challenges and their resolutions. This practice underscored the versatility and effectiveness of issue tracking in software development.
+The Final Results section of this report underscores the practical outcomes of this learning experience, illustrating how the application’s functionality evolved through the incremental addition of features. This visual representation reinforced real-world applications of version control principles. Additionally, leveraging GitHub issues for tracking and managing problems provided a structured history of challenges and their resolutions, highlighting the versatility and effectiveness of issue tracking in software development.
 
-Exploring SVN as an Alternative Solution to Git provided valuable insights into different version control methodologies. By comparing SVN's centralized system with Git's distributed model, I gained a broader understanding of how various approaches can be tailored to fit specific project needs, emphasizing the adaptability required in modern DevOps practices.
+Exploring SVN as an alternative to Git in Part 1.1 provided valuable insights into different version control methodologies. By comparing SVN’s centralized model with Git’s distributed approach, I gained a broader understanding of how various strategies can be tailored to specific project needs. This comparison emphasized the adaptability required in modern DevOps practices.
 
-Furthermore, the Gradle component of Part 2 further enhanced my technical proficiency by teaching me how to create and configure custom tasks. Learning to execute the server, run unit tests, backup the source code, and generate zip archives not only streamlined the build and deployment process but also deepened my understanding of build automation. This hands-on experience with Gradle has equipped me with practical skills in managing project builds and dependencies, which are crucial in contemporary software development environments.
+The Gradle component of Part 2 further enhanced my technical proficiency by teaching me how to create and configure custom tasks. Learning to execute the server, run unit tests, back up the source code, and generate zip archives not only streamlined the build and deployment process but also deepened my understanding of build automation. This hands-on experience with Gradle equipped me with practical skills in managing project builds and dependencies, which are crucial in contemporary software development environments.
 
-Overall, this assignment not only strengthened my expertise in Git and introduced me to SVN but also highlighted the crucial role of build automation and version control in fostering collaboration, maintaining code integrity, and efficiently managing project development.
+Part 3 of this assignment introduced advanced concepts of collaborative software development by integrating continuous integration and continuous deployment (CI/CD) practices. Implementing automated workflows enhanced my ability to manage software releases efficiently, reducing errors and improving overall deployment speed. The experience of setting up pipelines and automating testing further reinforced the importance of integrating DevOps strategies into version control workflows. Additionally, working with collaborative development tools emphasized the importance of effective team coordination, peer reviews, and maintaining high-quality code standards.
+
+Overall, this assignment not only strengthened my expertise in Git and introduced me to SVN but also emphasized the crucial role of build automation, issue tracking, and CI/CD in fostering collaboration, maintaining code integrity, and efficiently managing project development. The integration of these version control and automation principles has provided me with a comprehensive skill set that will be invaluable in future software development endeavors.
+
+[⬆ Back to Top](#Table-of-contents)
