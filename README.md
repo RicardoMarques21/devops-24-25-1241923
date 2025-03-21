@@ -53,7 +53,7 @@ Implementing and testing a Gradle project.
 
 ### CA1: Part3:
 
-Transforming a Maven ina Gradle project.
+Transforming a Maven into a Gradle project.
 
 ## Environment Setup
 Initially, I cloned an existing repository containing the Tutorial React.js and Spring Data REST application to have a local copy of the tutorial project. Following this, I set up my own repository to host the class assignments and ensure that all developments were tracked under my version control.
