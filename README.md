@@ -14,18 +14,21 @@
 
 - [Introduction](#introduction)
 - [Environment Setup](#environment-setup)
+  - [Part 1.1 and Part 1.2](#part-11-and-part-12)
+  - [Part 2](#part-2)
+  - [Part 3](#part-3)
 - [Part 1.1: Development Without Branches](#part-11-development-without-branches)
-  - [Goals and Requirements (Part 1.1)](#goals-and-requirements-part-11)
-  - [Key Developments (Part 1.1)](#key-developments-part-11)
+  - [Goals and Requirements](#goals-and-requirements-part-11)
+  - [Key Developments](#key-developments-part-11)
 - [Part 1.2: Development Using Branches](#part-12-development-using-branches)
-  - [Goals and Requirements (Part 1.2)](#goals-and-requirements-part-12)
-  - [Key Developments (Part 1.2)](#key-developments-part-12)
+  - [Goals and Requirements](#goals-and-requirements-part-12)
+  - [Key Developments](#key-developments-part-12)
 - [Part 2: Gradle Tasks and Testing Tutorial](#part-2-gradle-tasks-and-testing-tutorial)
-  - [Goals and Requirements (Part 2)](#goals-and-requirements-part-2)
-  - [Key Developments (Part 2)](#key-developments-part-2)
+  - [Goals and Requirements](#goals-and-requirements-part-2)
+  - [Key Developments](#key-developments-part-2)
 - [Part 3: Converting the basic version of the Tutorial application to Gradle](#part-3-converting-the-basic-version-of-the-tutorial-application-to-gradle)
-  - [Goals and Requirements (Part 3)](#goals-and-requirements-part-3)
-  - [Key Developments (Part 3)](#key-developments-part-3)
+  - [Goals and Requirements](#goals-and-requirements-part-3)
+  - [Key Developments](#key-developments-part-3)
 - [Final Results](#final-results)
   - [Implementation](#implementation)
   - [Branches](#branches)
@@ -60,7 +63,7 @@ Initially, I cloned an existing repository containing the Tutorial React.js and 
 
 **Creating My Repository:** I created a new folder on my local machine for the DevOps class assignments and initialized it as a Git repository. This was the first step in establishing my workspace for the project.
 
-**Part 1.1 and Part 1.2**
+### Part 1.1 and Part 1.2
 ```bash
 mkdir ~/devops-24-25-1241923
 cd ~/devops-24-25-1241923
@@ -88,7 +91,7 @@ Reflecting on the process, I now recognize the importance of a clear initial com
 git push -u origin master
 ```
 
-**Part 2**
+### Part 2
 
 1. **Download and Prepare the Example Application:**
 
@@ -106,6 +109,40 @@ git push -u origin master
     mv gradle_basic_demo ~/devops-24-25-1241923/CA1/part2/
     cd ~/devops-24-25-1241923/CA1/part2/gradle_basic_demo
     ```
+    
+### Part 3
+
+1. Extract the ZIP file inside the CA1/Part3/ Folder:
+   - Download or receive the ZIP file and extract it inside the CA1/Part3/ folder into the repository.
+   - Now I have an "empty" Spring Boot application structure in that folder, which can be built using Gradle.  
+    
+2. Check Available Gradle Tasks:  
+  - I opened a terminal in the CA1/Part3/ directory and run the following command to check the available Gradle tasks:
+```bash
+./gradlew tasks
+```
+
+3. Delete the src Folder:
+  - In the CA1/Part3/ folder, I deleted the existing src folder. I did this by running the following command:
+```bash
+rm -rf src
+```
+
+4. Copy the src Folder from the Basic Tutorial, webpack.config.js and package.json:
+  - I used the cp command in the terminal to copy the files:
+```bash
+cp -r /path/to/basic/tutorial/src /path/to/CA1/Part3/
+```
+  - Then used the following commands to copy webpack.config.js and package.json files:
+```bash
+cp /path/to/basic/tutorial/webpack.config.js /path/to/CA1/Part3/
+cp /path/to/basic/tutorial/package.json /path/to/CA1/Part3/
+```
+
+5. Delete the src/main/resources/static/built/ Folder:
+```bash
+rm -rf src/main/resources/static/built/
+```
 
 This process ensured that I had a clean, organized start to the class assignments, with a clear link to the foundational tutorial application while maintaining my repository for all subsequent developments.
 
@@ -383,7 +420,7 @@ This document details the steps to enhance your Gradle project by adding tasks t
 
 **1. Adding a New Task to Execute the Server**
 
-Edit your `build.gradle` file to add a Gradle task that runs the server. For example:
+I edited the `build.gradle` file to add a Gradle task that runs the server. For example:
 
 ```gradle
 tasks.register('runServer', JavaExec) {
@@ -447,7 +484,7 @@ destinationDirectory = file("$buildDir/backup")
 }
 ```
 
-To run the backup task, execute:
+To run the backup task, executed:
 ```bash
 ./gradlew backupSources
 ```
@@ -464,7 +501,7 @@ git push origin ca1-part2
 
 ### Goals and Requirements (Part 3)
 
-In this part of the assignment, the goal is to convert the "basic" version of the Tutorial application to Gradle, instead of Maven.
+In this part of the assignment, the goal was to convert the "basic" version of the Tutorial application to Gradle, instead of Maven.
 
 ### Key Developments (Part 3)
 
