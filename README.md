@@ -34,7 +34,7 @@
 - [Alternative Solutions](#alternative-solutions)
   - [Comparison of SVN and Git](#comparison-of-svn-and-git)
   - [Utilizing SVN for the Assignment part 1.1](#utilizing-svn-for-the-assignment-part-11)
-  - [Alternative solution to Gradle: Maven](#alternative-solution-to-gradle-maven)
+  - [Alternative solution to Gradle: Ant](#alternative-solution-to-gradle-ant)
 - [Conclusion](#conclusion)
 
 
@@ -655,136 +655,103 @@ svn copy file:///home/user/CA1/svn_repo/trunk file:///home/user/CA1/svn_repo/tag
 
 By tailoring SVN's features to fit the requirements of this assignment, a workflow similar to Git's can be achieved, showcasing the adaptability of version control systems in software development environments.
 
-## Alternative solution to Gradle: Maven
+## Alternative solution to Gradle: Ant
 
-**Implementing the Assignment Goals with Maven**
+**Implementing the Assignment Goals with Ant**
 
-To match the setup and functionality achieved with Gradle, I will outline the steps required to configure Maven for the Spring Boot application.
-This alternative solution will mirror the Gradle setup, including the integration of frontend assets, custom build tasks, and file management.
-Here’s a detailed step-by-step guide on setting up Maven for our Spring Boot application, including the necessary pom.xml configurations:
+To match the setup and functionality achieved with Gradle, this configuration outlines the steps required to configure Ant for the Spring Boot application. 
+This alternative solution mirrors the Gradle setup, including frontend asset integration, custom build tasks, and file management.
 
 - **Project Setup:**
-  I created a `pom.xml` for the Spring Boot application, including dependencies for REST, Thymeleaf, JPA, and H2.
-  Here is a snippet of the pom.xml that includes these dependencies:
+I created an Ant build file for the Spring Boot application, including dependencies for REST, Thymeleaf, JPA, and H2:
 ```xml
-<dependencies>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-thymeleaf</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-rest</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <scope>runtime</scope>
-    </dependency>
-</dependencies>
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SpringBootApp" default="build" basedir=".">
+<!-- Property definitions -->
+<property name="build.dir" value="build"/>
+<property name="dist.dir" value="${build.dir}/dist"/>
+<property name="jar.name" value="springbootapp.jar"/>
+<property name="static.dir" value="src/main/resources/static"/>
+<property name="lib.dir" value="lib"/>
+
+<!-- Ensure the lib directory exists -->
+<mkdir dir="${lib.dir}"/>
+
+        <!-- Dependencies should be manually placed inside the lib directory -->
+        <!-- Required JAR files: -->
+        <!-- - spring-boot-starter-data-jpa.jar -->
+        <!-- - spring-boot-starter-thymeleaf.jar -->
+        <!-- - spring-boot-starter-data-rest.jar -->
+        <!-- - h2.jar -->
 ```
 
 - **Frontend Integration:**
-  It was necessary to configure the frontend-maven-plugin to handle Node and npm installation as well as building the frontend:
+It was necessary to configure Ant to handle Node.js and npm installation as well as building the frontend:
 ```xml
-<plugins>
-    <plugin>
-        <groupId>com.github.eirslett</groupId>
-        <artifactId>frontend-maven-plugin</artifactId>
-        <version>1.11.0</version>
-        <configuration>
-            <nodeVersion>v16.20.2</nodeVersion>
-            <workingDirectory>src/main/resources/static</workingDirectory>
-        </configuration>
-        <executions>
-            <execution>
-                <id>install node and npm</id>
-                <goals>
-                    <goal>install-node-and-npm</goal>
-                </goals>
-            </execution>
-            <execution>
-                <id>npm install</id>
-                <goals>
-                    <goal>npm</goal>
-                    <configuration>
-                        <arguments>install</arguments>
-                    </configuration>
-                </goals>
-            </execution>
-            <execution>
-                <id>npm run build</id>
-                <goals>
-                    <goal>npm</goal>
-                    <configuration>
-                        <arguments>run build</arguments>
-                    </configuration>
-                </goals>
-            </execution>
-        </executions>
-    </plugin>
-</plugins>
+<!-- Task to install Node.js and npm -->
+<target name="install-node">
+  <exec executable="npm">
+    <arg value="install"/>
+    <arg value="--prefix"/>
+    <arg value="${static.dir}"/>
+  </exec>
+</target>
+
+        <!-- Task to run the frontend build -->
+<target name="build-frontend" depends="install-node">
+<exec executable="npm">
+  <arg value="run"/>
+  <arg value="build"/>
+  <arg value="--prefix"/>
+  <arg value="${static.dir}"/>
+</exec>
+</target>
 ```
 
-- **Copy JAR Task:** To copy the generated .jar file to a distribution folder, the maven-resources-plugin was configured:
+- **Copy JAR Task:**
+  To copy the generated .jar file to a distribution folder, we use the 'copy' task in Ant:
 ```xml
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-resources-plugin</artifactId>
-    <version>3.2.0</version>
-    <executions>
-        <execution>
-            <id>copy-jar</id>
-            <phase>package</phase>
-            <goals>
-                <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-                <outputDirectory>${project.build.directory}/dist</outputDirectory>
-                <resources>
-                    <resource>
-                        <directory>${project.build.directory}</directory>
-                        <includes>
-                            <include>*.jar</include>
-                        </includes>
-                    </resource>
-                </resources>
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
+<!-- Task to compile the application -->
+<target name="compile" depends="clean">
+  <mkdir dir="${build.dir}"/>
+  <javac srcdir="src/main/java" destdir="${build.dir}" classpath="${lib.dir}/*"/>
+</target>
+        
+        <!-- Task to package the application as a JAR -->
+<target name="jar" depends="compile">
+<mkdir dir="${dist.dir}"/>
+<jar destfile="${dist.dir}/${jar.name}" basedir="${build.dir}"/>
+</target>
+
+        <!-- Task to copy the JAR to the distribution directory -->
+<target name="copy-jar" depends="jar">
+<copy file="${dist.dir}/${jar.name}" todir="${dist.dir}"/>
+</target>
 ```
 
-- **Delete Webpack Files Task:** To delete the Webpack-generated files, the maven-clean-plugin was configured:
+- **Delete Webpack Files Task:**
+  To delete the Webpack-generated files, we use the 'delete' task in Ant:
 ```xml
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-clean-plugin</artifactId>
-    <version>3.1.0</version>
-    <executions>
-        <execution>
-            <id>delete-webpack-files</id>
-            <phase>clean</phase>
-            <goals>
-                <goal>clean</goal>
-            </goals>
-            <configuration>
-                <filesets>
-                    <fileset>
-                        <directory>src/main/resources/static/built</directory>
-                        <includes>
-                            <include>*</include>
-                        </includes>
-                    </fileset>
-                </filesets> 
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
+<target name="delete-webpack-files">
+  <delete>
+    <fileset dir="${static.dir}/built">
+      <include name="*" />
+    </fileset>
+  </delete>
+</target>
+
+        <!-- Make sure 'delete-webpack-files' runs before 'clean' -->
+<target name="clean" depends="delete-webpack-files">
+<delete dir="${build.dir}"/>
+<delete dir="${static.dir}/built"/>
+</target>
+```
+
+- **To build the project:**
+```xml
+ <!-- Main task -->
+    <target name="build" depends="build-frontend, copy-jar"/>
+</project>
 ```
 [⬆ Back to Top](#Table-of-contents)
 
