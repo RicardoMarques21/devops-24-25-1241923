@@ -594,7 +594,7 @@ Through Part 3, after implementing and testing all new features, the branch tut-
 ### Tags
 Below is a visual depiction of the project's tags, generated using the `git tag` command.
 
-![enter image description here](https://i.postimg.cc/Kj53NZK3/Captura-de-ecr-2025-03-16-100324.png)
+![enter image description here](https://i.postimg.cc/Dyjc6xD9/Captura-de-ecr-2025-03-30-095813.png)
 
 The use of tags taught me how to mark specific points in the project's history as significant. This is crucial for tracking the progress of the project over time and for quickly reverting to previous versions if necessary.
 
