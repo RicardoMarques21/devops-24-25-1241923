@@ -14,17 +14,31 @@
 
 - [Introduction](#introduction)
 - [Goals and Requirements](#goals-and-requirements)
+  - [Part1](#part1)
+  - [Part2](#part2)
 - [Environment Setup](#environment-setup)
+  - [Part1](#part1-1)
+  - [Part2](#part2-1)
 - [Key Developments](#key-developments)
-  - [Installed and configured all required development tools inside the Ubuntu Server VM](#installed-and-configured-all-required-development-tools-inside-the-ubuntu-server-vm-)
-  - [Successfully built and ran the Spring Boot tutorial project and the gradle_basic_demo project inside the VM](#successfully-built-and-ran-the-spring-boot-tutorial-project-and-the-gradle_basic_demo-project-inside-the-vm)
-  - [Accessed Spring Boot web applications from the host machine’s browser using the VM’s IP address](#accessed-spring-boot-web-applications-from-the-host-machines-browser-using-the-vms-ip-address)
+  - [Part1](#part1-2)
+    - [Installed and configured all required development tools inside the Ubuntu Server VM](#installed-and-configured-all-required-development-tools-inside-the-ubuntu-server-vm-)
+    - [Successfully built and ran the Spring Boot tutorial project and the gradle_basic_demo project inside the VM](#successfully-built-and-ran-the-spring-boot-tutorial-project-and-the-gradle_basic_demo-project-inside-the-vm)
+    - [Accessed Spring Boot web applications from the host machine’s browser using the VM’s IP address](#accessed-spring-boot-web-applications-from-the-host-machines-browser-using-the-vms-ip-address)
+    - [Tagging the repository with CA2-part1 after pushing README.md](#tagging-the-repository-with-ca2-part1-after-pushing-readmemd)
+  - [Part2](#part2-2)
+    - [Used Bitbucket Repository as Initial Solution](#used-bitbucket-repository-as-initial-solution)
+    - [Setup Vagrant and Create VMs](#setup-vagrant-and-create-vms)
+    - [Provision Web and DB Machines](#provision-web-and-db-machines)
+    - [Spring Boot Configuration](#spring-boot-configuration)
+    - [Built and launched the Spring Boot application in the web VM with a remote database](#built-and-launched-the-spring-boot-application-in-the-web-vm-with-a-remote-database)
+    - [Tagging the repository with CA2-part2 after final testing](#tagging-the-repository-with-ca2-part2-after-final-testing)
 - [Conclusion](#conclusion)
 
 ## Introduction
 This documentation summarizes the work completed for the CA2 assignment. The objective was to simulate a realistic software development environment using a virtual machine and apply practices such as version control, building and testing Java projects with Gradle, and managing simple client-server communication. All development was done using Ubuntu Server in a virtualized environment, reflecting production-like conditions.
 
 ## Goals and Requirements
+### Part1
 1. Set up a virtual machine using VirtualBox or UTM with Ubuntu Server.
 
 2. Install all necessary tools inside the VM (Git, JDK, Maven, Gradle).
@@ -43,7 +57,23 @@ This documentation summarizes the work completed for the CA2 assignment. The obj
 
 9. Document the full process in a README file without committing the VM image.
 
+### Part2
+1. Use Vagrant to provision two virtual machines.
+
+2. Understand and adapt the provided Vagrantfile.
+
+3. Copy and include the Vagrantfile in my repository.
+
+4. Modify the Vagrantfile to run my custom SpringBoot app.
+
+5. Document all steps and configuration.
+
+6. Tag the repository with CA2-part2.
+
+[⬆ Back to Top](#Table-of-contents)
+
 ## Environment Setup
+### Part1
 A virtual machine was created using VirtualBox (or UTM for Apple Silicon) running Ubuntu Server. Inside the VM, the following tools were installed:
 
 * Git
@@ -56,10 +86,25 @@ A virtual machine was created using VirtualBox (or UTM for Apple Silicon) runnin
 
 The Git repository containing the necessary projects was cloned into the VM, and all builds and executions were performed within this environment.
 
+### Part2
+For Part 2, a development environment was set up using Vagrant to automate the provisioning of two separate Ubuntu Server virtual machines, using the following tools:
+
+* Vagrant
+
+* VirtualBox (or UTM for Apple Silicon)
+
+* Ubuntu Server 18.04 LTS
+
+* Spring Boot (Gradle-based)
+
+* H2 Database
+
+
 [⬆ Back to Top](#Table-of-contents)
 
 ## Key Developments
-### Installed and configured all required development tools inside the Ubuntu Server VM.  
+### Part1
+#### Installed and configured all required development tools inside the Ubuntu Server VM.  
 **Create a VM**
 - The first step was to download VirtualBox from https://www.virtualbox.org/wiki/Downloads and install it.
 - I launched VirtualBox and clicked New to begin setting up a new virtual machine. I named the VM and selected the appropriate type and version to match the operating system I intended to install.
@@ -117,7 +162,7 @@ git@github.com:RicardoMarques21/devops-24-25-1241923.git
 
 [⬆ Back to Top](#Table-of-contents)
 
-### Successfully built and ran the Spring Boot tutorial project and the gradle_basic_demo project inside the VM.
+#### Successfully built and ran the Spring Boot tutorial project and the gradle_basic_demo project inside the VM.
 **Set Up Development Environment**
 After setting up the virtual machine and ensuring it was properly configured for network access, I proceeded to install
 the necessary tools required for the projects.
@@ -212,7 +257,7 @@ project** using the virtual machine.
 ```
 [⬆ Back to Top](#Table-of-contents)
 
-### Accessed Spring Boot web applications from the host machine’s browser using the VM’s IP address.
+#### Accessed Spring Boot web applications from the host machine’s browser using the VM’s IP address.
 1. To ensure the application was accessible from external devices such as the host machine or other devices on the same
    network, I specified the VM's IP address when accessing it. To determine the IP address, I used the `ifconfig`
    command. Here is the URL I used to access the application:
@@ -252,11 +297,204 @@ http://192.168.56.5:8080/
 
 <img src="https://i.postimg.cc/zv05psh7/Captura-de-ecr-2025-04-06-101013.png" width="500">
 
-### Tagging the repository with CA2-part1 after pushing README.md.
+#### Tagging the repository with CA2-part1 after pushing README.md.
 
 After all tests were completed and the documentation was written, I created the tag CA2-part1 and pushed it to the repository.
+
+### Part2
+#### Used Bitbucket Repository as Initial Solution
+To set up the multi-VM environment required for this assignment, I used the Bitbucket repository pssmatos/vagrant-multi-spring-tut-demo as the initial solution. This repository provided a foundational Vagrant setup with two virtual machines:
+
+* web VM – configured to run the Spring Boot application
+
+* db VM – configured to host the H2 database
+
+```bash
+git clone https://bitbucket.org/pssmatos/vagrant-multi-spring-tut-demo/
+```
+Then I copy the Vagrantfile to CA2-part2 directory.
+```bash
+cp -r vagrant-multi-spring-tut-demo/Vagrantfile C:\Users\ricar\Documents\Switch\devops-24-25-1241923\CA2
+```
+#### Setup Vagrant and Create VMs
+
+I began by installing Vagrant from https://developer.hashicorp.com/vagrant/downloads and VirtualBox (or UTM on Apple Silicon).
+
+I created a new project folder and initialized a Vagrant configuration file with the following command:
+
+```bash
+vagrant init
+```
+I then edited the Vagrantfile to define and provision two separate virtual machines:
+
+* One for hosting the Spring Boot web application.
+
+* Another for running the H2 database server.
+
+The updated Vagrantfile included:
+
+* config.vm.define blocks for web and db VMs.
+
+* Private network IPs (192.168.56.10 and 192.168.56.11).
+
+* Port forwarding from 8080 on the web VM to the host.
+
+After all configurations to the Vagrantfile, my final version is as follows:
+
+```ruby
+Vagrant.configure("2") do |config|
+  # Enable SSH agent forwarding for GitHub authentication
+  config.ssh.forward_agent = true
+
+  # Use Ubuntu 22.04 (Jammy Jellyfish) base box
+  config.vm.box = "ubuntu/jammy64"
+
+  # =====================================================
+  # Common provisioning for all VMs
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get update -y
+    sudo apt-get install -y iputils-ping avahi-daemon libnss-mdns unzip \
+        openjdk-17-jdk-headless
+  SHELL
+
+  # =====================================================
+  # Database VM configuration
+  config.vm.define "db" do |db|
+    db.vm.hostname = "db"
+    db.vm.network "private_network", ip: "192.168.56.11"
+    db.vm.network "forwarded_port", guest: 8082, host: 8082
+    db.vm.network "forwarded_port", guest: 9092, host: 9092
+
+    # Download H2 database JAR
+    db.vm.provision "shell", inline: <<-SHELL
+      wget https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar
+    SHELL
+
+    # Start the H2 server in the background (always run)
+    db.vm.provision "shell", run: 'always', inline: <<-SHELL
+      java -cp ./h2*.jar org.h2.tools.Server -web -webAllowOthers -tcp -tcpAllowOthers -ifNotExists > ~/out.txt &
+    SHELL
+  end
+
+  # =====================================================
+  # Webserver VM configuration
+  config.vm.define "web" do |web|
+    web.vm.hostname = "web"
+    web.vm.network "private_network", ip: "192.168.56.10"
+    web.vm.network "forwarded_port", guest: 8080, host: 8080
+
+    # Share the host's SSH directory into the VM (read-only)
+    web.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh_host", type: "virtualbox"
+
+    # Enable SSH agent forwarding inside this VM
+    web.ssh.forward_agent = true
+
+    # Web VM provisioning steps
+    web.vm.provision "shell", privileged: false, inline: <<-SHELL
+      # Copy the SSH private key into place and secure it
+      cp /home/vagrant/.ssh_host/id_ed25519 ~/.ssh/id_ed25519
+      chmod 600 ~/.ssh/id_ed25519
+
+      # Trust GitHub host to prevent SSH prompt
+      ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      # Clone the GitHub repository (only if it doesn’t exist yet)
+      if [ ! -d "devops-24-25-1241923" ]; then
+        git clone git@github.com:RicardoMarques21/devops-24-25-1241923.git
+      fi
+
+      # Navigate to the project directory and build the app
+      cd devops-24-25-1241923/CA1/part3/react-and-spring-data-rest-basic
+      chmod u+x gradlew
+      ./gradlew clean build
+      ./gradlew bootRun
+
+      # Deploy the generated WAR file to Tomcat
+      sudo cp ./build/libs/basic-0.0.1-SNAPSHOT.war /var/lib/tomcat9/webapps
+    SHELL
+  end
+end
+```
+#### Provision Web and DB Machines
+I created two provisioning scripts to automate the setup of the environment:
+
+provision-web.sh installed:
+
+* OpenJDK 17
+
+* Gradle
+
+* Git
+
+* Spring Boot application dependencies
+
+provision-db.sh installed:
+
+* Java
+
+* H2 database server
+
+* Configured H2 to accept TCP connections
+
+#### Spring Boot Configuration
+
+I modified the application.properties file of the Spring Boot project to connect to the external H2 database hosted on the db VM:
+
+```bash
+spring.datasource.url=jdbc:h2:tcp://192.168.56.11:1521/~/test
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+```
+
+Update React App.js: The src/App.js needed adjustments to match the new backend path:
+```js
+client({method: 'GET', path: '/basic-0.0.1-SNAPSHOT/api/employees'}).done(response => {
+```
+After booting both machines with vagrant up, the web VM could successfully connect to the db VM over the private network.
+
+#### Built and launched the Spring Boot application in the web VM with a remote database.
+As part of the provisioning process for the web VM, the Spring Boot application was automatically prepared and launched using Gradle.
+1. Clone the repository and navigate to the project directory.
+* During provisioning, the GitHub repository is cloned into the VM automatically using the following commands inside the provision-web.sh script:
+```bash
+git clone git@github.com:RicardoMarques21/devops-24-25-1241923.git
+cd devops-24-25-1241923
+```
+2. Build and run the application
+* Once inside the project directory, the application is built and started using Gradle. These steps are also automated by the provisioning script:
+```bash
+./gradlew build
+./gradlew bootRun
+```
+Once the server was running, I accessed the application from the host browser using:
+
+```text
+ http://localhost:8080/basic-0.0.1-SNAPSHOT/
+```
+<img src="https://i.postimg.cc/7LnD5qr7/Captura-de-ecr-2025-04-09-170443.png" width="500">  
+
+I also accessed the H2 console by visiting http://localhost:8082/h2-console and connected to the H2 database using the JDBC URL jdbc:h2:tcp://192.168.56.11:9092/./jpadb. Here's a snapshot of the H2 Login page, where I entered the connection details:
+
+<img src="https://i.postimg.cc/g2V82t45/Captura-de-ecr-2025-04-09-170752.png" width="500">
+
+#### Tagging the repository with CA2-part2 after final testing.
+After successfully running the system using the two-VM setup and verifying everything was functional, I committed all final changes and tagged the repository:
+
+```bash
+git add .
+git commit -m "Final updates for CA2 Part 2"
+git push
+git tag CA2-part2
+git push origin CA2-part2
+```
+This marks the completion of the CA2 Part 2 submission.
 
 [⬆ Back to Top](#Table-of-contents)
 
 ## Conclusion
-CA2 provided practical experience working within a server-based virtual environment. By setting up and configuring a virtual machine running Ubuntu Server, I was able to simulate real-world conditions for building and running Java applications. The process of installing development tools, running applications without a graphical interface, and enabling communication between the VM and the host machine helped reinforce key concepts related to system setup, server-side execution, and environment configuration.
+CA2 provided valuable hands-on experience in configuring and working within a server-based virtual environment. Through the setup of a virtual machine running Ubuntu Server, I was able to replicate real-world conditions for building and deploying Java applications. The process involved installing and configuring essential development tools such as Git, Maven, Gradle, and Java, as well as ensuring smooth communication between the virtual machine and the host machine.
+
+In Part 2, I focused on extending the project by launching and testing a Spring Boot application on the web VM, with a remote database. I successfully cloned the repository, built the project using Gradle, and started the application. I also enabled seamless communication between the host and the virtual machine by accessing the application via the VM’s IP address. This process reinforced key concepts related to environment configuration, application deployment, and database integration within a virtualized system.
+
+Through both parts of the assignment, I gained a deeper understanding of server-side execution, the importance of environment configuration, and the hands-on aspects of deploying and managing Java applications in a virtualized environment.
