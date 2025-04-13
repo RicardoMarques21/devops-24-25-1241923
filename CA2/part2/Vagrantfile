@@ -1,0 +1,72 @@
+Vagrant.configure("2") do |config|
+  # Enable SSH agent forwarding for GitHub authentication
+  config.ssh.forward_agent = true
+
+  # Use Ubuntu 22.04 (Jammy Jellyfish) base box
+  config.vm.box = "ubuntu/jammy64"
+
+  # =====================================================
+  # Common provisioning for all VMs
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get update -y
+    sudo apt-get install -y iputils-ping avahi-daemon libnss-mdns unzip \
+        openjdk-17-jdk-headless
+  SHELL
+
+  # =====================================================
+  # Database VM configuration
+  config.vm.define "db" do |db|
+    db.vm.hostname = "db"
+    db.vm.network "private_network", ip: "192.168.56.11"
+    db.vm.network "forwarded_port", guest: 8082, host: 8082
+    db.vm.network "forwarded_port", guest: 9092, host: 9092
+
+    # Download H2 database JAR
+    db.vm.provision "shell", inline: <<-SHELL
+      wget https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar
+    SHELL
+
+    # Start the H2 server in the background (always run)
+    db.vm.provision "shell", run: 'always', inline: <<-SHELL
+      java -cp ./h2*.jar org.h2.tools.Server -web -webAllowOthers -tcp -tcpAllowOthers -ifNotExists > ~/out.txt &
+    SHELL
+  end
+
+  # =====================================================
+  # Webserver VM configuration
+  config.vm.define "web" do |web|
+    web.vm.hostname = "web"
+    web.vm.network "private_network", ip: "192.168.56.10"
+    web.vm.network "forwarded_port", guest: 8080, host: 8080
+
+    # Share the host's SSH directory into the VM (read-only)
+    web.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh_host", type: "virtualbox"
+
+    # Enable SSH agent forwarding inside this VM
+    web.ssh.forward_agent = true
+
+    # Web VM provisioning steps
+    web.vm.provision "shell", privileged: false, inline: <<-SHELL
+      # Copy the SSH private key into place and secure it
+      cp /home/vagrant/.ssh_host/id_ed25519 ~/.ssh/id_ed25519
+      chmod 600 ~/.ssh/id_ed25519
+
+      # Trust GitHub host to prevent SSH prompt
+      ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      # Clone the GitHub repository (only if it doesn’t exist yet)
+      if [ ! -d "devops-24-25-1241923" ]; then
+        git clone git@github.com:RicardoMarques21/devops-24-25-1241923.git
+      fi
+
+      # Navigate to the project directory and build the app
+      cd devops-24-25-1241923/CA1/part3/react-and-spring-data-rest-basic
+      chmod u+x gradlew
+      ./gradlew clean build
+      ./gradlew bootRun
+
+      # Deploy the generated WAR file to Tomcat
+      sudo cp ./build/libs/basic-0.0.1-SNAPSHOT.war /var/lib/tomcat9/webapps
+    SHELL
+  end
+end
