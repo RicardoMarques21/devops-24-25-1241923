@@ -32,6 +32,7 @@
     - [Spring Boot Configuration](#spring-boot-configuration)
     - [Built and launched the Spring Boot application in the web VM with a remote database](#built-and-launched-the-spring-boot-application-in-the-web-vm-with-a-remote-database)
     - [Tagging the repository with CA2-part2 after final testing](#tagging-the-repository-with-ca2-part2-after-final-testing)
+- [Alternative Solution:Using Hyper-V with Vagrant](#alternative-solutionusing-hyper-v-with-vagrant)
 - [Conclusion](#conclusion)
 
 ## Introduction
@@ -492,9 +493,87 @@ This marks the completion of the CA2 Part 2 submission.
 
 [⬆ Back to Top](#Table-of-contents)
 
+## Alternative Solution:Using Hyper-V with Vagrant
+
+In this section, I explore Hyper-V as an alternative virtualization tool to VirtualBox. Below is a detailed comparison between Hyper-V and VirtualBox, followed by instructions on how Hyper-V can be used with Vagrant to achieve the goals outlined for this assignment.
+
+### Comparison of Hyper-V and VirtualBox
+
+#### VirtualBox:
+
+* **Overview**: A free, open-source hypervisor from Oracle, favored for its ease of use and support for various OSes.
+
+* **Pros**:
+
+  * Free and open-source.
+
+  * User-friendly GUI.
+
+  * Supports many guest operating systems.
+
+* **Cons**:
+
+  * Limited advanced features.
+
+  * Can be slower with 3D graphics and larger VMs.
+
+#### Hyper-V:
+* **Overview**: A virtualization platform from Microsoft, included with Windows Pro and Enterprise editions, providing efficient virtualization and integration with Windows environments.
+
+* **Pros**:
+
+   * High performance and stability, especially with Windows-based virtual machines.
+    
+   * Native integration with Windows OS.
+    
+   * Provides advanced features like live migration, snapshots, and virtual machine replication.
+    
+   * Built-in support for containerization and cloud workloads.
+
+* **Cons**:
+
+  * Not available on Windows Home edition.
+
+  * Steeper learning curve for configuration and management.
+
+  * Limited cross-platform support compared to VirtualBox.
+
+### Using Hyper-V with Vagrant
+
+Integrating Hyper-V with Vagrant involves a few steps:
+
+1. **Enable Hyper-V**: Open PowerShell as Administrator and run:
+```shell
+  dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V-All /All /LimitAccess /Restart
+```
+
+2. **Install the Vagrant Hyper-V Plugin**:This plugin allows Vagrant to manage virtual machines on Hyper-V.
+```bash
+vagrant plugin install vagrant-hyperv
+```
+
+3.**Configure the Vagrantfile**:Update your Vagrantfile to use Hyper-V as the provider.
+```ruby
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+  config.vm.provider "hyperv" do |h|
+    h.memory = 1024
+    h.cpus = 2
+  end
+end
+```
+
+Switching to **Hyper-V** with Vagrant provides a robust solution for Windows-based environments, enhancing the virtualization capabilities. It integrates well with native Windows features and offers strong performance, especially for Windows-centric workloads.
+
+This alternative solution aligns with the objective of improving the development environment and streamlining transitions to production-like settings, particularly for users on Windows platforms.
+
+[⬆ Back to Top](#Table-of-contents)
+
 ## Conclusion
 CA2 provided valuable hands-on experience in configuring and working within a server-based virtual environment. Through the setup of a virtual machine running Ubuntu Server, I was able to replicate real-world conditions for building and deploying Java applications. The process involved installing and configuring essential development tools such as Git, Maven, Gradle, and Java, as well as ensuring smooth communication between the virtual machine and the host machine.
 
 In Part 2, I focused on extending the project by launching and testing a Spring Boot application on the web VM, with a remote database. I successfully cloned the repository, built the project using Gradle, and started the application. I also enabled seamless communication between the host and the virtual machine by accessing the application via the VM’s IP address. This process reinforced key concepts related to environment configuration, application deployment, and database integration within a virtualized system.
 
 Through both parts of the assignment, I gained a deeper understanding of server-side execution, the importance of environment configuration, and the hands-on aspects of deploying and managing Java applications in a virtualized environment.
+
+[⬆ Back to Top](#Table-of-contents)
