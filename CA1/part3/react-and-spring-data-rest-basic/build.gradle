@@ -42,8 +42,7 @@ frontend {
 
 // Spring Boot build config
 springBoot {
-	mainClass = 'com.example.YourMainClass'  // Replace this with your main class path
-}
+	mainClass = 'com.example.ReactAndSpringDataRestApplication'
 
 // Ensure to create executable jar
 bootJar {
