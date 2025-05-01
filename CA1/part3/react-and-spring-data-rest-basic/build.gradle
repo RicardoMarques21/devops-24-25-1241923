@@ -3,7 +3,6 @@ plugins {
 	id 'org.springframework.boot' version '3.4.3'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'org.siouan.frontend-jdk17' version '8.0.0'
-	id 'war'
 }
 
 group = 'com.greglturnquist'
@@ -41,20 +40,24 @@ frontend {
 	checkScript = "run check"
 }
 
-// Definindo o nome do arquivo WAR gerado
-war {
-	archiveFileName = 'react-and-spring-data-rest-basic.war'  // Nome do WAR gerado
+// Spring Boot build config
+springBoot {
+	mainClass = 'com.example.YourMainClass'  // Replace this with your main class path
 }
 
-// Remover a tarefa de copiar JAR, pois você quer um WAR agora
-tasks.register('copyWar', Copy) {
+// Ensure to create executable jar
+bootJar {
+	baseName = 'react-and-spring-data-rest-basic'
+	version = '0.0.1-SNAPSHOT'
+}
+
+tasks.register('copyJar', Copy) {
 	dependsOn build
 	from("${buildDir}/libs")
 	into("${rootDir}/dist")
-	include("*.war")  // Mudança de *.jar para *.war
+	include("*.jar")
 }
 
-// Limpeza de arquivos do webpack (se necessário)
 tasks.register('cleanWebpack', Delete) {
 	delete fileTree("${projectDir}/src/main/resources/static/built/")
 }
