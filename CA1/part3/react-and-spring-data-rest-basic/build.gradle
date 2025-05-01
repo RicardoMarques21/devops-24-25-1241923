@@ -40,17 +40,6 @@ frontend {
 	checkScript = "run check"
 }
 
-// Spring Boot build config
-springBoot {
-	mainClass = 'com.example.ReactAndSpringDataRestApplication'
-}
-
-// Ensure to create executable jar
-bootJar {
-	archiveBaseName = 'react-and-spring-data-rest-basic'
-	version = '0.0.1-SNAPSHOT'
-}
-
 tasks.register('copyJar', Copy) {
 	dependsOn build
 	from("${buildDir}/libs")
@@ -63,3 +52,4 @@ tasks.register('cleanWebpack', Delete) {
 }
 
 clean.dependsOn(cleanWebpack)
+
