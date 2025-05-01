@@ -43,7 +43,7 @@ frontend {
 // Spring Boot build config
 springBoot {
 	mainClass = 'com.example.ReactAndSpringDataRestApplication'
-
+}
 // Ensure to create executable jar
 bootJar {
 	archiveBaseName = 'react-and-spring-data-rest-basic'
