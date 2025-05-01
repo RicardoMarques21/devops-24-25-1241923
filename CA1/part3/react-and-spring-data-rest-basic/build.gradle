@@ -47,7 +47,7 @@ springBoot {
 
 // Ensure to create executable jar
 bootJar {
-	baseName = 'react-and-spring-data-rest-basic'
+	archiveBaseName = 'react-and-spring-data-rest-basic'
 	version = '0.0.1-SNAPSHOT'
 }
 
