@@ -1,4 +1,4 @@
-# CA2: Virtualization with Vagrant
+# CA2: Virtualization with Vagrant /  Containers with Docker
 
 **Author:** Ricardo Marques
 
