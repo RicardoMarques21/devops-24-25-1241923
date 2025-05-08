@@ -709,9 +709,9 @@ In a separate terminal, I built and ran the chat client:
 ./gradlew runClient
 ```
 
-<img src="https://i.postimg.cc/BQPzZq30/Captura-de-ecr-2025-05-01-113556.png" width="500"> 
+<img src="https://i.postimg.cc/BQPzZq30/Captura-de-ecr-2025-05-01-113556.png" width="500">  
 
-<img src="https://i.postimg.cc/YC1ygbjD/Captura-de-ecr-2025-05-01-113537.png" width="500"> 
+<img src="https://i.postimg.cc/YC1ygbjD/Captura-de-ecr-2025-05-01-113537.png" width="500">   
 
 I connected two clients to the chat server running inside the container and tested real-time messaging.
 
@@ -720,10 +720,10 @@ I connected two clients to the chat server running inside the container and test
 Finally, I pushed the image to Docker Hub:
 
 ```bash
-docker push ineslemos/chat-server:version1
+docker push ricardomarques21/chat-server:version1
 ```
 
-<img src="https://i.postimg.cc/WpHKPdQ8/Captura-de-ecr-2025-05-01-114329.png" width="500"> 
+<img src="https://i.postimg.cc/WpHKPdQ8/Captura-de-ecr-2025-05-01-114329.png" width="500">   
 
 #### Dockerfile - Version 2: Building the Chat Server Locally and Copying the JAR Into the Docker Image
 For the second version, I built the chat server on my host machine and copied the resulting JAR file into the Docker image. Here's the process:
@@ -778,17 +778,17 @@ docker build -f CA2/part3/version2/Dockerfile -t ricardomarques21/chat-server:ve
 ```bash
 docker images
 ```
-<img src="https://i.postimg.cc/C5zQq0fb/Captura-de-ecr-2025-05-01-121030.png" width="500"> 
+<img src="https://i.postimg.cc/C5zQq0fb/Captura-de-ecr-2025-05-01-121030.png" width="500">  
 
 5. Run the Docker Container:
 
 I ran the container with the same port mapping:
 
 ```bash
-docker run -p 59001:59001 ineslemos/chat-server:version2
+docker run -p 59001:59001 ricardomarques21/chat-server:version2
 ```
 
-<img src="https://i.postimg.cc/j58122Cs/Captura-de-ecr-2025-05-01-121606.png" width="500"> 
+<img src="https://i.postimg.cc/j58122Cs/Captura-de-ecr-2025-05-01-121606.png" width="500">  
 
 6. Test the Chat Server:
 
@@ -797,7 +797,7 @@ I ran the chat client again with the same procedure:
 ```bash
 ./gradlew runClient
 ```
-<img src="https://i.postimg.cc/j5q9RPxg/Captura-de-ecr-2025-05-01-121720.png" width="500"> 
+<img src="https://i.postimg.cc/j5q9RPxg/Captura-de-ecr-2025-05-01-121720.png" width="500">  
 
 
 I connected two clients to the server and tested communication.
@@ -810,7 +810,7 @@ Finally, I pushed the second version of the image to Docker Hub:
 docker push ricardomarques21/chat-server:version2
 ```
 
-<img src="https://i.postimg.cc/4x79nxNX/Captura-de-ecr-2025-05-08-150150.png" width="500">
+<img src="https://i.postimg.cc/4x79nxNX/Captura-de-ecr-2025-05-08-150150.png" width="500">  
 
 ### Part4
 #### Setting Up and Deploying Web and Database Services with Docker Compose
@@ -907,15 +907,15 @@ docker compose up --build
 ```
 Once the containers were running, I accessed the web application via http://localhost:8080/basic-0.0.1-SNAPSHOT/ and the H2 database console at http://localhost:8082.
 
-<img src="https://i.postimg.cc/fRX1CMqK/Captura-de-ecr-2025-05-01-161111.png" width="500">
+<img src="https://i.postimg.cc/fRX1CMqK/Captura-de-ecr-2025-05-01-161111.png" width="500">  
 
-<img src="https://i.postimg.cc/gkxCwVv1/Captura-de-ecr-2025-05-02-104237.png" width="500">
+<img src="https://i.postimg.cc/gkxCwVv1/Captura-de-ecr-2025-05-02-104237.png" width="500">  
 
-<img src="https://i.postimg.cc/Gt567t1M/Captura-de-ecr-2025-05-02-104246.png" width="500">
+<img src="https://i.postimg.cc/Gt567t1M/Captura-de-ecr-2025-05-02-104246.png" width="500">  
 
-<img src="https://i.postimg.cc/3rfMJSDg/Captura-de-ecr-2025-05-02-104438.png" width="500">
+<img src="https://i.postimg.cc/3rfMJSDg/Captura-de-ecr-2025-05-02-104438.png" width="500">  
 
-<img src="https://i.postimg.cc/8PxqL74c/Captura-de-ecr-2025-05-02-104543.png" width="500">
+<img src="https://i.postimg.cc/8PxqL74c/Captura-de-ecr-2025-05-02-104543.png" width="500">  
 
 5. Image Tagging and Pushing to Docker Hub
 * To tag and push the Docker images to Docker Hub, I followed these steps:
@@ -932,7 +932,7 @@ docker push ricardomarques21/part2-web:web
 docker push ricardomarques21/part2-db:db
 ```
 
-<img src="https://i.postimg.cc/tg0ytzPs/Captura-de-ecr-2025-05-08-150631.png" width="500">
+<img src="https://i.postimg.cc/tg0ytzPs/Captura-de-ecr-2025-05-08-150631.png" width="500">  
 
 [⬆ Back to Top](#Table-of-contents)
 
