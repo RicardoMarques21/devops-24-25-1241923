@@ -728,6 +728,8 @@ docker push ricardomarques21/chat-server:version1
 
 <img src="https://i.postimg.cc/WpHKPdQ8/Captura-de-ecr-2025-05-01-114329.png" width="600">   
 
+[⬆ Back to Top](#Table-of-contents)
+
 #### Dockerfile - Version 2: Building the Chat Server Locally and Copying the JAR Into the Docker Image
 For the second version, I built the chat server on my host machine and copied the resulting JAR file into the Docker image. Here's the process:
 ```dockerfile
@@ -814,6 +816,8 @@ docker push ricardomarques21/chat-server:version2
 ```
 
 <img src="https://i.postimg.cc/4x79nxNX/Captura-de-ecr-2025-05-08-150150.png" width="600">  
+
+[⬆ Back to Top](#Table-of-contents)
 
 ### Part4
 #### Setting Up and Deploying Web and Database Services with Docker Compose
