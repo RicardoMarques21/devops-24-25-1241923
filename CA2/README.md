@@ -16,9 +16,13 @@
 - [Goals and Requirements](#goals-and-requirements)
   - [Part1](#part1)
   - [Part2](#part2)
+  - [Part3](#part3)
+  - [Part4](#part4)
 - [Environment Setup](#environment-setup)
   - [Part1](#part1-1)
   - [Part2](#part2-1)
+  - [Part3](#part3-1)
+  - [Part4](#part4-1)
 - [Key Developments](#key-developments)
   - [Part1](#part1-2)
     - [Installed and configured all required development tools inside the Ubuntu Server VM](#installed-and-configured-all-required-development-tools-inside-the-ubuntu-server-vm-)
@@ -32,7 +36,12 @@
     - [Spring Boot Configuration](#spring-boot-configuration)
     - [Built and launched the Spring Boot application in the web VM with a remote database](#built-and-launched-the-spring-boot-application-in-the-web-vm-with-a-remote-database)
     - [Tagging the repository with CA2-part2 after final testing](#tagging-the-repository-with-ca2-part2-after-final-testing)
-- [Alternative Solution:Using Hyper-V with Vagrant](#alternative-solutionusing-hyper-v-with-vagrant)
+    - [Alternative Solution:Using Hyper-V with Vagrant](#alternative-solutionusing-hyper-v-with-vagrant)
+  - [Part3](#part3-2)
+    - [Dockerfile - Version 1: Building the Chat Server Inside the Docker Container](#dockerfile---version-1-building-the-chat-server-inside-the-docker-container)
+    - [Dockerfile - Version 2: Building the Chat Server Locally and Copying the JAR Into the Docker Image](#dockerfile---version-2-building-the-chat-server-locally-and-copying-the-jar-into-the-docker-image)
+  - [Part4](#part4-2)
+    - [Setting Up and Deploying Web and Database Services with Docker Compose](#setting-up-and-deploying-web-and-database-services-with-docker-compose)
 - [Conclusion](#conclusion)
 
 ## Introduction
@@ -71,6 +80,20 @@ This documentation summarizes the work completed for the CA2 assignment. The obj
 
 6. Tag the repository with CA2-part2.
 
+### Part3
+1. Containerize the Chat Server.
+2. Build a Docker Image.
+3. Push the Docker Image to Docker Hub.
+4. Client-Server Connectivity.
+5. Tag the Git Repository.
+
+### Part4
+1. Containerize the Project with Docker Compose.
+2. Use Two Docker Services, web and db, to run Spring Boot app and to run H2.
+3. Publish Docker Images to Docker Hub.
+4. Enable Volume-Based Database Access.
+5. Tag the Repository.
+
 [⬆ Back to Top](#Table-of-contents)
 
 ## Environment Setup
@@ -100,6 +123,33 @@ For Part 2, a development environment was set up using Vagrant to automate the p
 
 * H2 Database
 
+### Part3
+To containerize and run the Chat Server using Docker, and allow the Chat Client to connect from the host machine.
+
+This part replaces the Vagrant-based setup from Part 2 with a simpler and more portable Docker-based solution. The following tools were used:
+
+* Docker
+* Docker Hub
+* OpenJDK 17
+* Chat Server (TCP-based)
+* Chat Client
+
+### Part4
+To build and run a Spring Boot + H2 application using Docker Compose, replacing the Vagrant-based setup used in Part 2.
+
+This part separates concerns into two Docker containers:
+
+* web: for the Spring Boot application running on Tomcat
+
+* db: for the H2 database server
+
+The following tools were used:  
+
+* Docker & Docker Compose
+* Spring Boot (Gradle)
+* H2 Database
+* Ubuntu Base Image 
+* Docker Hub
 
 [⬆ Back to Top](#Table-of-contents)
 
@@ -567,6 +617,323 @@ Switching to **Hyper-V** with Vagrant provides a robust solution for Windows-bas
 
 This alternative solution aligns with the objective of improving the development environment and streamlining transitions to production-like settings, particularly for users on Windows platforms.
 
+### Part3
+#### Dockerfile - Version 1: Building the Chat Server Inside the Docker Container
+For the first version, I set up the chat server to be built directly inside the Docker container. Here's how I did it:
+
+1. Ensure Docker is Running: I made sure Docker was installed and running on my system.
+
+2. Navigate to the Dockerfile Directory: I moved to the directory where the Dockerfile was located.
+
+3. Dockerfile Setup:
+* I used the Gradle JDK 17 image to clone the repository and build the chat server.
+
+* Once built, I used a slim JRE image to run the server, ensuring the final image was as lightweight as possible.
+
+* The Dockerfile performed the following steps:
+
+  * Clone the repository from Bitbucket.
+
+  * Build the project using Gradle.
+
+  * Copy the built JAR file to the final image.
+
+  * Expose port 59001 for server communication.
+
+  * Set the entry point to run the chat server application.
+```dockerfile
+  # Build stage using Gradle with JDK 17
+FROM gradle:jdk17 AS builder
+
+# Set the working directory
+WORKDIR /app
+
+# Clone the application repository
+RUN git clone https://bitbucket.org/pssmatos/gradle_basic_demo.git
+
+# Change directory to the cloned project
+WORKDIR /app/gradle_basic_demo
+
+# Give execution permission to the Gradle wrapper
+RUN chmod +x gradlew
+
+# Build the application
+RUN ./gradlew build
+
+# Final stage: lightweight image with only the JRE
+FROM eclipse-temurin:17-jre
+
+# Set the working directory in the final container
+WORKDIR /app
+
+# Copy the generated JAR from the builder stage
+COPY --from=builder /app/gradle_basic_demo/build/libs/basic_demo-0.1.0.jar .
+
+# Expose the port used by the chat server
+EXPOSE 59001
+
+# Command to run the chat server when the container starts
+ENTRYPOINT ["java", "-cp", "basic_demo-0.1.0.jar", "basic_demo.ChatServerApp", "59001"]
+```
+
+4. Build the Docker Image:
+
+* I ran the following command to build the image and tag it as version1:
+
+```bash
+docker build -t ricardomarques21/chat-server:version1 .
+```
+
+5. Verify the Image: To confirm the image was created, I used:
+
+```bash
+docker images
+```
+
+<img src="https://i.postimg.cc/T384pZ2W/Captura-de-ecr-2025-05-01-111718.png" width="500">  
+
+6. Run the Docker Container:
+
+I ran the container, mapping port 59001 on the host to the container:
+
+```bash
+docker run -p 59001:59001 ricardomarques21/chat-server:version1
+```
+
+7. Test the Chat Server:
+
+In a separate terminal, I built and ran the chat client:
+
+```bash
+./gradlew build
+./gradlew runClient
+```
+
+<img src="https://i.postimg.cc/BQPzZq30/Captura-de-ecr-2025-05-01-113556.png" width="500"> 
+
+<img src="https://i.postimg.cc/YC1ygbjD/Captura-de-ecr-2025-05-01-113537.png" width="500"> 
+
+I connected two clients to the chat server running inside the container and tested real-time messaging.
+
+8. Push to Docker Hub:
+
+Finally, I pushed the image to Docker Hub:
+
+```bash
+docker push ineslemos/chat-server:version1
+```
+
+<img src="https://i.postimg.cc/WpHKPdQ8/Captura-de-ecr-2025-05-01-114329.png" width="500"> 
+
+#### Dockerfile - Version 2: Building the Chat Server Locally and Copying the JAR Into the Docker Image
+For the second version, I built the chat server on my host machine and copied the resulting JAR file into the Docker image. Here's the process:
+```dockerfile
+# Use a JRE base image for runtime
+FROM eclipse-temurin:21-jre as builder
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the JAR file built on the host into the /app directory in the image
+COPY CA1/part2/gradle_basic_demo/build/libs/basic_demo-0.1.0.jar /app/basic_demo-0.1.0.jar
+
+# Expose the port the server will use
+EXPOSE 59001
+
+# Command to run the chat server when the container starts
+ENTRYPOINT ["java", "-cp", "/app/basic_demo-0.1.0.jar", "basic_demo.ChatServerApp", "59001"]
+```
+
+1. Build the Application Locally: I ran the following command to build the application on my host machine:
+
+```bash
+./gradlew build
+```
+This generated the basic_demo-0.1.0.jar file in the build/libs directory.
+
+2. Dockerfile Setup:
+
+* I used the Gradle JDK 21 image just for compatibility with the build process (not necessary for running the server).
+
+* I then copied the basic_demo-0.1.0.jar file from the host machine into the Docker image.
+
+* The Dockerfile contained the following steps:
+
+  * Copy the pre-built JAR file into the container.
+
+  * Expose port 59001.
+
+  * Set the entry point to run the chat server using the JAR file.
+
+3. Build the Docker Image:
+
+I ran the following command, using the correct Dockerfile:
+
+```bash
+docker build -f CA2/part3/version2/Dockerfile -t ricardomarques21/chat-server:version2 .
+```
+
+4. Verify the Image: Just like with version 1, I checked the image:
+
+```bash
+docker images
+```
+<img src="https://i.postimg.cc/C5zQq0fb/Captura-de-ecr-2025-05-01-121030.png" width="500"> 
+
+5. Run the Docker Container:
+
+I ran the container with the same port mapping:
+
+```bash
+docker run -p 59001:59001 ineslemos/chat-server:version2
+```
+
+<img src="https://i.postimg.cc/j58122Cs/Captura-de-ecr-2025-05-01-121606.png" width="500"> 
+
+6. Test the Chat Server:
+
+I ran the chat client again with the same procedure:
+
+```bash
+./gradlew runClient
+```
+<img src="https://i.postimg.cc/j5q9RPxg/Captura-de-ecr-2025-05-01-121720.png" width="500"> 
+
+
+I connected two clients to the server and tested communication.
+
+7. Push to Docker Hub:
+
+Finally, I pushed the second version of the image to Docker Hub:
+
+```bash
+docker push ricardomarques21/chat-server:version2
+```
+
+<img src="https://i.postimg.cc/4x79nxNX/Captura-de-ecr-2025-05-08-150150.png" width="500">
+
+### Part4
+#### Setting Up and Deploying Web and Database Services with Docker Compose
+
+1. Database Dockerfile
+   For the database service, I created a Dockerfile in the db directory for an H2 database, with the following setup:
+```dockerfile
+FROM ubuntu:latest
+
+RUN apt-get update && \
+    apt-get install -y openjdk-11-jdk-headless && \
+    apt-get install unzip -y && \
+    apt-get install wget -y
+
+RUN mkdir -p /usr/src/app
+
+WORKDIR /usr/src/app/
+
+RUN wget https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar
+
+EXPOSE 8082
+EXPOSE 9092
+
+CMD ["java", "-cp", "./h2-1.4.200.jar", "org.h2.tools.Server", "-web", "-webAllowOthers", "-tcp", "-tcpAllowOthers", "-ifNotExists"]
+```
+
+2. Web Application Dockerfile
+   In the web directory, I set up a Dockerfile for the Spring Boot application as follows:
+```dockerfile
+# Use Java 17 base image
+FROM eclipse-temurin:17-jdk-jammy
+
+# Create working directory
+WORKDIR /usr/src/app
+
+# Install git
+RUN apt-get update && apt-get install -y git
+
+# Clone the repository
+RUN git clone https://github.com/RicardoMarques21/devops-24-25-1241923.git .
+
+# Navigate to the project directory
+WORKDIR /usr/src/app/CA1/part3/react-and-spring-data-rest-basic
+
+# Make Gradle wrapper executable and build the project
+RUN chmod +x gradlew && ./gradlew build
+
+# Expose the application port
+EXPOSE 8080
+
+# Run the Spring Boot JAR
+CMD ["java", "-jar", "build/libs/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.jar"]
+```
+
+3. Docker Compose Configuration
+   To manage both the database and web containers, I created a docker-compose.yml file:
+```dockerfile
+services:
+  web:
+    build: ./web
+    ports:
+      - "8080:8080"
+    networks:
+      my_custom_network:
+        ipv4_address: 192.168.56.10
+    depends_on:
+      - db
+
+  db:
+    build: ./db
+    ports:
+      - "8082:8082"
+      - "9092:9092"
+    volumes:
+      - ./data:/usr/src/data-backup
+    networks:
+      my_custom_network:
+        ipv4_address: 192.168.56.11
+
+networks:
+  my_custom_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "192.168.56.0/24"
+
+volumes:
+  db_data: {}
+```
+
+4. To run the containers:
+```bash
+docker compose up --build
+```
+Once the containers were running, I accessed the web application via http://localhost:8080/basic-0.0.1-SNAPSHOT/ and the H2 database console at http://localhost:8082.
+
+<img src="https://i.postimg.cc/fRX1CMqK/Captura-de-ecr-2025-05-01-161111.png" width="500">
+
+<img src="https://i.postimg.cc/gkxCwVv1/Captura-de-ecr-2025-05-02-104237.png" width="500">
+
+<img src="https://i.postimg.cc/Gt567t1M/Captura-de-ecr-2025-05-02-104246.png" width="500">
+
+<img src="https://i.postimg.cc/3rfMJSDg/Captura-de-ecr-2025-05-02-104438.png" width="500">
+
+<img src="https://i.postimg.cc/8PxqL74c/Captura-de-ecr-2025-05-02-104543.png" width="500">
+
+5. Image Tagging and Pushing to Docker Hub
+* To tag and push the Docker images to Docker Hub, I followed these steps:
+```bash
+docker tag e0c894b1be3c ricardomarques21/part2-web:web
+docker tag 589fe273b0fe ricardomarques21/part2-db:db
+```
+```bash
+docker login
+```
+
+```bash
+docker push ricardomarques21/part2-web:web
+docker push ricardomarques21/part2-db:db
+```
+
+<img src="https://i.postimg.cc/tg0ytzPs/Captura-de-ecr-2025-05-08-150631.png" width="500">
+
 [⬆ Back to Top](#Table-of-contents)
 
 ## Conclusion
@@ -574,6 +941,10 @@ CA2 provided valuable hands-on experience in configuring and working within a se
 
 In Part 2, I focused on extending the project by launching and testing a Spring Boot application on the web VM, with a remote database. I successfully cloned the repository, built the project using Gradle, and started the application. I also enabled seamless communication between the host and the virtual machine by accessing the application via the VM’s IP address. This process reinforced key concepts related to environment configuration, application deployment, and database integration within a virtualized system.
 
-Through both parts of the assignment, I gained a deeper understanding of server-side execution, the importance of environment configuration, and the hands-on aspects of deploying and managing Java applications in a virtualized environment.
+For Part 3, I transitioned to containerizing the chat server application using Docker. By building the application inside the Docker container and then testing the server with a chat client, I gained hands-on experience in Docker image creation, containerization, and container communication. The process allowed me to test and refine two distinct methods: one where the server was built inside the Dockerfile and another where the server’s JAR file was built on the host and copied into the Docker image. This step-by-step process also involved pushing the Docker images to Docker Hub, making them accessible for deployment in various environments.
+
+In Part 4, the focus shifted to using Docker Compose to set up a multi-container environment with a web container running a Spring Boot application and a db container running an H2 database. This part reinforced concepts related to managing services in a containerized environment, further enhancing my ability to configure and deploy applications efficiently.
+
+Through all parts of this assignment, I gained a deeper understanding of server-side execution, environment configuration, and the hands-on aspects of deploying and managing Java applications in both virtualized and containerized environments. Each step helped me refine my skills in building, deploying, and maintaining Java applications in various setups, including virtual machines and Docker containers, with an emphasis on seamless communication and database integration.
 
 [⬆ Back to Top](#Table-of-contents)
